@@ -1,9 +1,0 @@
-@mixin sizes($width, $height) {
-    height: $height;
-    width: $width;
-}
-
-@mixin minimum-size($minwidth, $minheight) {
-    min-height: $minheight;
-    min-width: $minwidth;
-}

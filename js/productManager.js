@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 class ProductManager {
-    #nextId = 0;
+    // #nextId = 0;
     #path;
     //  = "./Products.json"; //#path is used to make a private path that is not accessible outside of the class
 
@@ -105,15 +105,15 @@ async function main () {
 
     let products = await manager.getProducts();
 
-    // console.log(products);
+    console.log(products);
 
-    // await manager.addProduct("name", "description", 20, "thumbnail", 300, 4000);
+    await manager.addProduct("name", "description", 20, "thumbnail", 300, 4000);
 
     // await manager.getProductById(2);
 
     // await manager.updateProduct(1,"name","Mariposa"); //"Joyas", "Oro", 30, "thumbnail", 30, 2000
 
-    await manager.deleteProduct(3)
+    // await manager.deleteProduct(3)
 
     products = await manager.getProducts();
 
