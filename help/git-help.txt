@@ -281,8 +281,22 @@
 
     You also learnt that you can change it using a password protected SSH address.
 
-    If you are looking for an easy way to generate SSH keys for Git, you should take a look at our tutorial.
-
     SSH key authorization is preferred over password authentication, if you have a repository with a large activity.
 
-    If you are interested in Git or in Software Engineering, we have a complete guide dedicated to it on the website, so make sure to check it out!
+--------------------------Verifying connected Git Repository / Github Repositories----------------------------
+
+        To obtain only the remote URL:
+
+        git config --get remote.origin.url
+        If you require full output, and you are on a network that can reach the remote repo where the origin resides:
+
+        git remote show origin
+        When using git clone (from GitHub, or any source repository for that matter) the default name for the source of the clone is "origin". Using git remote show will display the information about this remote name. The first few lines should show:
+
+        C:\Users\jaredpar\VsVim> git remote show origin
+        * remote origin
+        Fetch URL: git@github.com:jaredpar/VsVim.git
+        Push  URL: git@github.com:jaredpar/VsVim.git
+        HEAD branch: master
+        Remote branches:
+        If you want to use the value in a script, you would use the first command listed in this answer.
