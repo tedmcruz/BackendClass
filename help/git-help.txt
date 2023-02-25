@@ -110,9 +110,15 @@
 
         C:/Users/"Ted Cruz"/Desktop/SupplyJeT/   or   cd C:/Users/"Ted Cruz"/Desktop/SupplyJeT/
 
-    To navigate up directory level use:
+    To navigate:
 
-        cd ~(here add route)
+        cd ~                        = got to root directory
+        cd ~(here add route)        = to go to desired route
+        cd ./(folder-name)          = move to (folder-name) which is located inside current route
+        cd ../                      = go up a directory
+
+
+
 
 ---------------------------Add Polyfill for backward compatability------------------------
 
