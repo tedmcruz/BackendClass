@@ -23,8 +23,9 @@ app.get("/products", (req,res)=>{
     if (!limit){
         return res.send(products);
     }
-
-    res.send(products.filter((p)=>p.id <= limit));
+    const productsLimit = products.slice(0, limit);
+    // res.send(products.filter((p)=>p.id <= limit));
+    res.send(productsLimit);
     res.end();
 })
 

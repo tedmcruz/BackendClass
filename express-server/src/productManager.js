@@ -38,7 +38,7 @@ export default class ProductManager {
     async addProduct(name, description, price, thumbnail, code, stock){
         const products = await this.getProducts();
 
-        let id = products.length +1; // = this.#nextId
+        let id = JSON.stringify(products.length +1); // = this.#nextId
 
         const newProduct = {
         id,
