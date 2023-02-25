@@ -109,11 +109,11 @@ async function main () {
 
     // await manager.addProduct("name", "description", 20, "thumbnail", 300, 4000);
 
-    // await manager.getProductById(2);
+    // await manager.getProductById("2");
 
-    // await manager.updateProduct(1,"name","Mariposa"); //"Joyas", "Oro", 30, "thumbnail", 30, 2000
+    // await manager.updateProduct("1","name","Mariposa"); //"Joyas", "Oro", 30, "thumbnail", 30, 2000
 
-    // await manager.deleteProduct(3)
+    // await manager.deleteProduct("3")
 
     products = await manager.getProducts();
 
