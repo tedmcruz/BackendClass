@@ -57,3 +57,16 @@ When using "switch" within "while", the code run will skip until the "case" with
     - Use "[]" for arrays
     - "return" runs before "useEffect".
     - Use "npm install react-router-dom" to add dependencies of React-JS to manage routing within a proyect.
+
+--------------------------------------------- Express Server---------------------------------------------------
+
+    INITIALIZATION
+        1) create/move to folder where project will be initialized = "cd ~[route]"
+        2) initialize project = "npm init -y"
+        3) install express = "npm install express"
+        4) create "src" folder inside folder
+        5) add " "type":"module", " line of code in "package.json" file under " "main" " to make sure file uses the type of module uses EGMASCRIPT syntax (like React-JS with "import")
+        6) download "json formatter" for google chrome to view json clearly.
+
+    CODING
+        - Everything that is sent needs to be a string, numbers have to be enclosed in "" (quotations) 
