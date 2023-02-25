@@ -23,7 +23,7 @@ export default class ProductManager {
     async getProductById(productId){
         const products = await this.getProducts();
 
-        let searchedProduct = products.find(p => p.id === productId);
+        let searchedProduct = products.find(p => p.id === JSON.stringify(productId));
 
         if (!searchedProduct) {
             throw new Error(`Product with Product ID ${productId} doesn't exist.`)
@@ -62,7 +62,7 @@ export default class ProductManager {
         const products = await this.getProducts();
                 
         const updatedProduct = await products.map((p) => 
-            p.id === productId ? {...p, [keyToUpdate]:dataToUpdate } : p
+            p.id === JSON.stringify(productId) ? {...p, [keyToUpdate]:dataToUpdate } : p
             );
 
         await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
@@ -83,7 +83,7 @@ export default class ProductManager {
         //     code : newCode, 
         //     stock : newStock 
         // };
-        console.log(updatedProduct);
+        // console.log(updatedProduct);
         
     }
 
@@ -92,7 +92,7 @@ export default class ProductManager {
         
                 
         const updatedProduct = await products.map((p) => 
-            p.id === productId ? {...p, ["name"]:"", ["description"]:"",["price"]:"",["thumbnail"]:"",["code"]:"",["stock"]:""} : p
+            p.id === JSON.stringify(productId) ? {...p, ["name"]:"", ["description"]:"",["price"]:"",["thumbnail"]:"",["code"]:"",["stock"]:""} : p
             );
 
         await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
@@ -109,11 +109,11 @@ async function main () {
 
     // await manager.addProduct("name", "description", 20, "thumbnail", 300, 4000);
 
-    // await manager.getProductById("2");
+    // await manager.getProductById(2);
 
-    // await manager.updateProduct("1","name","Mariposa"); //"Joyas", "Oro", 30, "thumbnail", 30, 2000
+    // await manager.updateProduct(1,"name","Mariposa"); //"Joyas", "Oro", 30, "thumbnail", 30, 2000
 
-    // await manager.deleteProduct("3")
+    // await manager.deleteProduct(3);
 
     products = await manager.getProducts();
 
