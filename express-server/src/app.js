@@ -4,17 +4,17 @@ import fs from "fs";
 */ 
 import ProductManager from "./productManager.js";
 
-/* // OPTION 1 TO CREATE PRODUCTS VARIABLE = EXTERNAL CODE
+/* // OPTION 1 TO CREATE PRODUCTS VARIABLE = USING EXTERNAL CODE
 import { createRequire } from "module";
 const require = createRequire(import.meta.url); // construct the require method
 const products =  require("./Products.json") // use the require method
 */
 
-/* // OPTION 2 TO CREATE PRODUCTS VARIABLE = DIRECT PULL FORM ".JSON" FILE
+/* // OPTION 2 TO CREATE PRODUCTS VARIABLE = ASSIGN THROUGH DIRECT PULL FORM "Prodcuts.json" FILE
 const products = JSON.parse(await fs.promises.readFile("./Products.json","utf-8"));
 */
 
-/* // OPTION 3 TO CREATE PRODUCTS VARIABLE = PULL FROM ".JS" FILE
+/* // OPTION 3 TO CREATE PRODUCTS VARIABLE = ASSIGN PULLING FROM "productManager.js" FILE
 const productManager = new ProductManager("./Products.json");
 const products = await productManager.getProducts();
 */
@@ -48,18 +48,28 @@ app.get("/products", (req,res)=>{
     // res.end();
 })
 
-app.get("/products/:id", (req,res)=>{
+app.get("/products/:pid", (req,res)=>{
     /* WAYS TO ASSIGN VALUE TO PROPERTIES
     const { id } = req.params 
     const id = req.params.id
     */ 
    
-    const { id } = req.params;
-    let productById = products.find(p => p.id === id);
+    const { pid } = req.params;
+    let productById = products.find(p => p.id === pid);
     console.log(productById);
     res.send(productById);
     // res.end();    
 });
+
+app.get("/carts", (req,res)=>{
+    const {limit} = req.query;
+    if (!limit){
+        return res.send(carts);
+    }
+    const cartsLimit = carts.slice(0, limit);
+
+    res.send(cartsLimit);
+})
 
 app.listen(8080, () => {
     console.log("Server listening on port 8080");

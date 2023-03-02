@@ -35,23 +35,19 @@ export default class ProductManager {
         // }
     }
 
-    async addProduct(title, description, code, price, stock, category, thumbnails){
+    async addProduct(name, description, price, thumbnail, code, stock){
         const products = await this.getProducts();
 
         let id = JSON.stringify(products.length +1); // = this.#nextId
 
-        let status = true;
-
         const newProduct = {
         id,
-        title,
+        name,
         description,
-        code,
         price,
-        status,
-        stock,
-        category,
-        thumbnails
+        thumbnail,
+        code,
+        stock
         };
 
         const addedProducts = [...products, newProduct];
@@ -62,7 +58,7 @@ export default class ProductManager {
     }
     
 
-    async updateProduct(productId,keyToUpdate,dataToUpdate){ //newtitle, newDescription, newPrice, newThumbnails, newCode, newStock
+    async updateProduct(productId,keyToUpdate,dataToUpdate){ //newName, newDescription, newPrice, newThumbnail, newCode, newStock
         const products = await this.getProducts();
                 
         const updatedProduct = await products.map((p) => 
@@ -80,10 +76,10 @@ export default class ProductManager {
 
         // const updatedProduct = {
         //     ...productToModifyById,
-        //     title : newtitle, 
+        //     name : newName, 
         //     description : newDescription, 
         //     price : newPrice, 
-        //     thumbnails : newThumbnails, 
+        //     thumbnail : newThumbnail, 
         //     code : newCode, 
         //     stock : newStock 
         // };
@@ -96,7 +92,7 @@ export default class ProductManager {
         
                 
         const updatedProduct = await products.map((p) => 
-            p.id === JSON.stringify(productId) ? {...p, ["title"]:"", ["description"]:"",["code"]:"",["price"]:"",["status"]:"",["stock"]:"",["category"]:"",["thumbnails"]:""} : p
+            p.id === JSON.stringify(productId) ? {...p, ["name"]:"", ["description"]:"",["price"]:"",["thumbnail"]:"",["code"]:"",["stock"]:""} : p
             );
 
         await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
@@ -111,11 +107,11 @@ async function main () {
 
     // console.log(products);
 
-    // await manager.addProduct("title", "description", 20, "thumbnails", 300, 4000);
+    // await manager.addProduct("name", "description", 20, "thumbnail", 300, 4000);
 
     // await manager.getProductById(2);
 
-    // await manager.updateProduct(1,"title","Mariposa"); //"Joyas", "Oro", 30, "thumbnails", 30, 2000
+    // await manager.updateProduct(1,"name","Mariposa"); //"Joyas", "Oro", 30, "thumbnail", 30, 2000
 
     // await manager.deleteProduct(3);
 
