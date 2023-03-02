@@ -3,6 +3,7 @@ import express from "express";
 import fs from "fs";
 */ 
 import ProductManager from "./productManager.js";
+import { Router } from "express";
 
 /* // OPTION 1 TO CREATE PRODUCTS VARIABLE = USING EXTERNAL CODE
 import { createRequire } from "module";
@@ -23,6 +24,7 @@ const productManager = new ProductManager("./Products.json");
 const products = await productManager.getProducts();
 
 const app = express();
+const router = Router();
 
 /* // CONST PRODUCTMANAGER AND PRODUCTS TP TEST SERVER 
 
