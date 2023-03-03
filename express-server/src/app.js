@@ -60,9 +60,7 @@ app.get("/products/:pid", (req,res)=>{
    
     const { pid } = req.params;
     let productById = products.find(p => p.id === pid);
-    // console.log(productById);
     res.send(productById);
-    // res.end();    
 });
 
 app.get("/carts", (req,res)=>{
