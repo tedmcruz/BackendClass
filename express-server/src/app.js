@@ -4,6 +4,8 @@ import fs from "fs";
 */ 
 import ProductManager from "./productManager.js";
 import { Router } from "express";
+import productsRouter from "./routers/products.routers.js";
+import cartsRouter from "./routers/carts.routers.js";
 
 /* // OPTION 1 TO CREATE PRODUCTS VARIABLE = USING EXTERNAL CODE
 import { createRequire } from "module";
@@ -72,6 +74,9 @@ app.get("/carts", (req,res)=>{
 
     res.send(cartsLimit);
 })
+
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
 
 app.listen(8080, () => {
     console.log("Server listening on port 8080");
