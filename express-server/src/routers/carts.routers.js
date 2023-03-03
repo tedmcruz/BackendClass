@@ -25,9 +25,9 @@ cartsRouter.get("/",(req,res) =>{
 
 cartsRouter.get("/:cid", (req,res)=>{
     const { cid } = req.params;
-    let productById = carts.find(c => c.id === cid);
-    console.log(productById);
-    res.send(productById);
+    let cartById = carts.find(c => c.id === cid);
+    // console.log(cartById);
+    res.send(cartById);
 });
 
 
@@ -46,14 +46,26 @@ cartsRouter.post("/",(req,res) =>{
 cartsRouter.post("/:cid/product/:pid",(req,res) =>{
 
     const {cid} = req.params;
+    let cartById = carts.find(c => c.id === cid);
+
     const {pid} = req.params;
-    
 
-    const newCart = {cid,quantity };
+    let productById = products.find(p => p.id === JSON.stringify(pid));
+    const {quantity} = req.body;
 
-    carts = [...carts, newCart];
 
-    res.send(newCart);
+
+    // const updatedCart = products.map((p) => 
+    //         p.id === JSON.stringify(pid) ? {...p, pid, quantity} : p
+    //         );
+
+    const newProductsToCart = {productById,quantity};
+
+    carts = [...carts, newProductsToCart];
+
+    console.log(productById);
+
+    res.send(newProductsToCart);
 });
 
 cartsRouter.put("/:cid", (req,res)=>{
@@ -89,7 +101,7 @@ cartsRouter.delete("/:pid", (req,res)=>{
     let stock ="";
     let category ="";
     let thumbnails = "";
-    console.log(productById);
+    // console.log(productById);
     const updatedProduct = {id, title, description, code, price, status, stock, category, thumbnails};
 
     const updatedProductsById = products.map((p) => 

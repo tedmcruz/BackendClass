@@ -19,7 +19,7 @@ productsRouter.get("/",(req,res) =>{
 productsRouter.get("/:pid", (req,res)=>{
     const { pid } = req.params;
     let productById = products.find(p => p.id === pid);
-    console.log(productById);
+    // console.log(productById);
     res.send(productById);
 });
 
@@ -73,7 +73,7 @@ productsRouter.delete("/:pid", (req,res)=>{
     let stock ="";
     let category ="";
     let thumbnails = "";
-    console.log(productById);
+    // console.log(productById);
     const updatedProduct = {id, title, description, code, price, status, stock, category, thumbnails};
 
     const updatedProductsById = products.map((p) => 

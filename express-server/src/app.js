@@ -2,7 +2,7 @@ import express from "express";
 /* // fs IS USED IN OPTION 2 TO CREATE PRODUCTS VARIABLE 
 import fs from "fs";
 */ 
-import ProductManager from "./productManager.js";
+// import ProductManager from "./productManager.js";
 import { Router } from "express";
 import productsRouter from "./routers/products.routers.js";
 import cartsRouter from "./routers/carts.routers.js";
@@ -22,8 +22,8 @@ const productManager = new ProductManager("./Products.json");
 const products = await productManager.getProducts();
 */
 
-const productManager = new ProductManager("./Products.json");
-const products = await productManager.getProducts();
+// const productManager = new ProductManager("./Products.json");
+// const products = await productManager.getProducts();
 
 const app = express();
 const router = Router();
@@ -60,7 +60,7 @@ app.get("/products/:pid", (req,res)=>{
    
     const { pid } = req.params;
     let productById = products.find(p => p.id === pid);
-    console.log(productById);
+    // console.log(productById);
     res.send(productById);
     // res.end();    
 });
