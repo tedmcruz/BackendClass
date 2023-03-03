@@ -64,12 +64,15 @@ cartsRouter.post("/:cid/product/:pid", (req,res) =>{
         filteredQuantity=filteredObject.quantity+quantity;
     }
 
-    const productsInCart = {idOfProductToAdd,["quantity"]:filteredQuantity};
+    const productsInCart = {["id"]:idOfProductToAdd,["quantity"]:filteredQuantity};
+
+    // let updatedProduct = filteredProducts.map((p) => 
+    //         p.id === pid ? {...p, productsInCart} : p
+    //         );
 
     let updatedProduct = filteredProducts.map((p) => 
-            p.id === pid ? {...p, productsInCart} : p
+            p.id === pid ? productsInCart : p
             );
-
 
     const newCart = {["id"]:cartId,["products"]:updatedProduct};
 
