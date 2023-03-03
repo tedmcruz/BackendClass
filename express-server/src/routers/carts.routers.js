@@ -2,8 +2,8 @@ import {Router, json} from "express";
 
 let carts = [];
 let products = [
-    {id:1,title:"Jabon", description:"Jabon liquido para manos",code:"101"},
-    {id:2,title:"Shampoo", description:"Shampoo liquido para cabeza",code:"202"}
+    {id:"1",title:"Jabon", description:"Jabon liquido para manos",code:"101"},
+    {id:"2",title:"Shampoo", description:"Shampoo liquido para cabeza",code:"202"}
 ];
 
 // {title:"", description:"",code:"",price:"",status:"",stock:"",category:"",thumbnails:""}
@@ -43,74 +43,38 @@ cartsRouter.post("/",(req,res) =>{
     res.send(newCart);
 });
 
-cartsRouter.post("/:cid/product/:pid",(req,res) =>{
+cartsRouter.post("/:cid/product/:pid", (req,res) =>{
 
     const {cid} = req.params;
-    let cartById = carts.find(c => c.id === cid);
+    // let cartById = carts.find(c => c.id === cid);
+    let id = cid;
 
     const {pid} = req.params;
 
-    let productById = products.find(p => p.id === JSON.stringify(pid));
+    let productById = products.find(p => p.id === pid);
+    let idOfAddedProduct = productById.id;
     const {quantity} = req.body;
 
+    const newProductsToCart = {idOfAddedProduct,quantity};
 
+    const updatedProduct = products.map((p) => 
+            p.id === pid ? {...p, newProductsToCart} : p
+            );
+    products = updatedProduct;
+    const newCart = {id,products};
 
-    // const updatedCart = products.map((p) => 
-    //         p.id === JSON.stringify(pid) ? {...p, pid, quantity} : p
-    //         );
+    const updatedCart = carts.map((c) => 
+            c.id === cid ? newCart : c
+            );
 
-    const newProductsToCart = {productById,quantity};
-
-    carts = [...carts, newProductsToCart];
-
-    console.log(productById);
-
-    res.send(newProductsToCart);
-});
-
-cartsRouter.put("/:cid", (req,res)=>{
+    // carts = [...carts, updatedCart];
     
-    const { cid } = req.params;
-    let id = cid;
-    let status = true;
-    let thumbnails = [];
 
-    const {title, description, code, price, stock, category} = req.body;
+    carts = updatedCart;
 
-    const updatedProduct = {id, title, description, code, price, status, stock, category, thumbnails};
-
-    const updatedProductsById = products.map((p) => 
-    p.id === pid ? updatedProduct : p
-    );
-
-    products = updatedProductsById;
-    
-    res.send(updatedProductsById);
-});
-
-cartsRouter.delete("/:pid", (req,res)=>{
-    
-    const { pid } = req.params;
-    let productById = products.find(p => p.id === pid);
-    let id = pid;
-    let title = `${productById.title} was the title of the product with this ID`;
-    let description ="";
-    let code = `${productById.code} was the code of the product with this ID`;
-    let price = "";
-    let status = "";
-    let stock ="";
-    let category ="";
-    let thumbnails = "";
     // console.log(productById);
-    const updatedProduct = {id, title, description, code, price, status, stock, category, thumbnails};
 
-    const updatedProductsById = products.map((p) => 
-    p.id === pid ? updatedProduct : p
-    );
-
-    products = updatedProductsById;
-    
-    res.send(updatedProductsById);
+    res.send(updatedCart);
 });
 
 export default cartsRouter;
