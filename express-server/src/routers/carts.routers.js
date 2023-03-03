@@ -6,6 +6,8 @@ let products = [
     {id:"2",title:"Shampoo", description:"Shampoo liquido para cabeza",code:"202"}
 ];
 
+// let addedProducts = products;
+
 // {title:"", description:"",code:"",price:"",status:"",stock:"",category:"",thumbnails:""}
 
 let id = 0;
@@ -47,21 +49,49 @@ cartsRouter.post("/:cid/product/:pid", (req,res) =>{
 
     const {cid} = req.params;
     // let cartById = carts.find(c => c.id === cid);
-    let id = cid;
+    let cartId = cid;
 
     const {pid} = req.params;
 
-    let productById = products.find(p => p.id === pid);
-    let idOfAddedProduct = productById.id;
+    let productById = products.find(p => p.id === pid); //addedProducts was being used
+    let idOfProductToAdd = productById.id;
     const {quantity} = req.body;
 
-    const newProductsToCart = {idOfAddedProduct,quantity};
 
-    const updatedProduct = products.map((p) => 
-            p.id === pid ? {...p, newProductsToCart} : p
+    let filteredCart = carts.find(c => c.id === cid);
+    let filteredProducts = filteredCart.products;
+    let filteredIndividualProduct = filteredProducts.find(p => p.id === pid);
+    
+    // let filteredProductsInCart = 
+    let filteredQuantity;
+    let cartProducts;
+
+    if (!filteredIndividualProduct.productsInCart){
+        filteredQuantity=quantity;
+    } else {
+        let filteredObject=filteredIndividualProduct.productsInCart;
+        filteredQuantity=filteredObject.quantity+quantity;
+    }
+
+    const productsInCart = {idOfProductToAdd,["quantity"]:filteredQuantity};
+    
+    // let filteredQuantity = filteredProductsInCart.map((p) => 
+    //         p.quantity === undefined ? 0 : (p.quantity + quantity)
+    //          );
+
+    console.log(filteredProducts);
+    // console.log(filteredProductsInCart);
+    console.log(filteredQuantity);
+
+    let updatedProduct = filteredProducts.map((p) => 
+            p.id === pid ? {...p, productsInCart} : p
             );
-    products = updatedProduct;
-    const newCart = {id,products};
+
+    // products = updatedProduct;
+    const newCart = {["id"]:cartId,["products"]:updatedProduct};
+
+    // products = updatedProduct;
+    // const newCart = {id,products};
 
     const updatedCart = carts.map((c) => 
             c.id === cid ? newCart : c
