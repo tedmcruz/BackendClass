@@ -3,9 +3,7 @@ import fs from "fs";
 export default class ProductManager {
     // #nextId = 0;
     #path;
-    //  = "./Products.json"; //#path is used to make a private path that is not accessible outside of the class
-
-
+    
     constructor(path){
         this.#path = path
     }
@@ -30,9 +28,6 @@ export default class ProductManager {
         }
 
         console.log(searchedProduct);
-        // if (searchedProduct.id === id){
-        //     return searchedProduct = products.filter(searchedProduct => searchedProduct.id===searchedId)
-        // }
     }
 
     async addProduct(title, description, code, price, stock, category, thumbnails){
@@ -57,8 +52,6 @@ export default class ProductManager {
         const addedProducts = [...products, newProduct];
 
         await fs.promises.writeFile(this.#path,JSON.stringify(addedProducts));
-
-        // this.#nextId += 1;
     }
     
 
@@ -70,25 +63,6 @@ export default class ProductManager {
             );
 
         await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
-
-        
-        // let productToModifyById = products.find(p => p.id === productId);
-
-        // if (!productToModifyById){
-        //     throw new Error(`Product ID ${productId} not found.`)
-        // }
-
-        // const updatedProduct = {
-        //     ...productToModifyById,
-        //     title : newtitle, 
-        //     description : newDescription, 
-        //     price : newPrice, 
-        //     thumbnails : newThumbnails, 
-        //     code : newCode, 
-        //     stock : newStock 
-        // };
-        // console.log(updatedProduct);
-        
     }
 
     async deleteProduct(productId){

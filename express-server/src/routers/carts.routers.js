@@ -66,10 +66,6 @@ cartsRouter.post("/:cid/product/:pid", (req,res) =>{
 
     const productsInCart = {["id"]:idOfProductToAdd,["quantity"]:filteredQuantity};
 
-    // let updatedProduct = filteredProducts.map((p) => 
-    //         p.id === pid ? {...p, productsInCart} : p
-    //         );
-
     let updatedProduct = filteredProducts.map((p) => 
             p.id === pid ? productsInCart : p
             );
