@@ -1,33 +1,58 @@
 import fs from "fs";
+import ProductManager from "./productManager";
 
 export default class CartManager {
     // #nextId = 0;
     #path = "./src/server/Carts.json";
     
     constructor(path){
-        this.#path = path
+        path = this.#path;
+    }
+
+    // Create ID for Cart
+
+    async createId(){
+
+        if(!carts){
+            let cartId = 1
+        } else {
+            let cartId = carts.length + 1;
+        }
+        return cartId;
+    } 
+
+    // Create Cart
+
+    async createCart(){
+        let carts = await this.getCarts();
+        const newCart = {
+            cartId: await this.createId(),
+            products:[]
+        }
+        carts = [...carts,newCart];
+        await fs.promises.writeFile(this.#path, JSON.stringify(carts))
     }
 
     async getCarts() {
     try {
-        const products = await fs.promises.readFile(this.#path,"utf-8");
+        const carts = await fs.promises.readFile(this.#path,"utf-8");
 
-        return JSON.parse(products);
-    }   catch (emptyProductsFile) {
+        return JSON.parse(carts);
+    }   catch (emptyCartsFile) {
         return [];
     }
     }
 
-    async getProductById(productId){
-        const products = await this.getProducts();
+    async getCartById(cartId){
+        const carts = await this.getCarts();
 
-        let searchedProduct = products.find(p => p.id === JSON.stringify(productId));
+        let searchedCart = carts.find(c => c.id === JSON.stringify(cartId));
 
-        if (!searchedProduct) {
-            throw new Error(`Product with Product ID ${productId} doesn't exist.`)
+        if (!searchedCart) {
+            throw new Error(`Cart with Cart ID ${cartId} doesn't exist.`)
         }
 
-        console.log(searchedProduct);
+        console.log(searchedCart);
     }
 
     async addProduct(title, description, code, price, stock, category, thumbnails){

@@ -1,14 +1,22 @@
 import express from "express";
 import fs from "fs";
 import ProductManager from "./productManager.js";
+import CartManager from "./cartManager.js";
 import { Router } from "express";
 import productsRouter from "./routers/products.routers.js";
 import cartsRouter from "./routers/carts.routers.js";
+import { dirname } from "path";
 
 const app = express();
+
+app.use(express.json());
+app.use(express.static(dirname + "../../public"));
+
+
 const router = Router();
 
 const productManager = new ProductManager();
+const cartManager = new CartManager();
 
 app.get("/products", (req,res)=>{
     const {limit} = req.query;

@@ -3,9 +3,9 @@ import fs from "fs";
 export default class ProductManager {
     // #nextId = 0;
     #path;
-    
+
     constructor(path){
-        this.#path = path
+        path = this.#path;
     }
 
     async getProducts() {
