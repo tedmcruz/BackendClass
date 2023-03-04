@@ -8,10 +8,10 @@ let products = [
 
 let id = 0;
 
-const cartsRouter = Router();
-cartsRouter.use(json());
+const cartManagerRouter = Router();
+cartManagerRouter.use(json());
 
-cartsRouter.get("/",(req,res) =>{
+cartManagerRouter.get("/",(req,res) =>{
     const {limit} = req.query;
     if (!limit){
         return res.send(carts);
@@ -21,14 +21,14 @@ cartsRouter.get("/",(req,res) =>{
     res.send(cartsLimit);
 });
 
-cartsRouter.get("/:cid", (req,res)=>{
+cartManagerRouter.get("/:cid", (req,res)=>{
     const { cid } = req.params;
     let cartById = carts.find(c => c.id === cid);
     res.send(cartById);
 });
 
 
-cartsRouter.post("/",(req,res) =>{
+cartManagerRouter.post("/",(req,res) =>{
 
     id = JSON.parse(id) + 1;
     id = JSON.stringify(id);
@@ -40,7 +40,7 @@ cartsRouter.post("/",(req,res) =>{
     res.send(newCart);
 });
 
-cartsRouter.post("/:cid/product/:pid", (req,res) =>{
+cartManagerRouter.post("/:cid/product/:pid", (req,res) =>{
 
     const {cid} = req.params;
     let cartId = cid;
@@ -81,4 +81,4 @@ cartsRouter.post("/:cid/product/:pid", (req,res) =>{
     res.send(updatedCart);
 });
 
-export default cartsRouter;
+export default cartManagerRouter;

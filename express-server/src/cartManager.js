@@ -12,13 +12,13 @@ export default class CartManager {
     // Create ID for Cart
 
     async createId(){
-
-        if(!carts){
+        if(!carts || carts === []) {
             let cartId = 1
+            return cartId;
         } else {
             let cartId = carts.length + 1;
+            return cartId;
         }
-        return cartId;
     } 
 
     // Create Cart
@@ -33,6 +33,8 @@ export default class CartManager {
         await fs.promises.writeFile(this.#path, JSON.stringify(carts))
     }
 
+    // Get Carts
+
     async getCarts() {
     try {
         const carts = await fs.promises.readFile(this.#path,"utf-8");
@@ -42,6 +44,8 @@ export default class CartManager {
         return [];
     }
     }
+
+    //Get Cart by ID
 
     async getCartById(cartId){
         const carts = await this.getCarts();

@@ -2,9 +2,9 @@ import express from "express";
 import fs from "fs";
 import ProductManager from "./productManager.js";
 import CartManager from "./cartManager.js";
-import { Router } from "express";
-import productsRouter from "./routers/products.routers.js";
-import cartsRouter from "./routers/carts.routers.js";
+import { Router, json } from "express";
+import productsManagerRouter from "./routers/products.routers.js";
+import cartsManagerRouter from "./routers/carts.routers.js";
 import { dirname } from "path";
 
 const app = express();
@@ -13,10 +13,10 @@ app.use(express.json());
 app.use(express.static(dirname + "../../public"));
 
 
-const router = Router();
+// const router = Router();
 
-const productManager = new ProductManager();
-const cartManager = new CartManager();
+// const productManager = new ProductManager();
+// const cartManager = new CartManager();
 
 app.get("/products", (req,res)=>{
     const {limit} = req.query;
@@ -43,8 +43,8 @@ app.get("/carts", (req,res)=>{
     res.send(cartsLimit);
 })
 
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
+app.use("/api/products", productsManagerRouter);
+app.use("/api/carts", cartsManagerRouter);
 
 app.listen(8080, () => {
     console.log("Server listening on port 8080");
