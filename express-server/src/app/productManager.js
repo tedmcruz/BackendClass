@@ -5,19 +5,21 @@ export default class ProductManager {
     #path = "../server/Products.json";
 
     constructor(path){
-        path = this.#path;
+        // path = this.#path;
+        this.path = path;
     }
 
     async getProducts() {
     try {
-        const products = JSON.parse(await fs.promises.readFile(this.#path,"utf-8"));
-        const {limit} = req.query;
-        if (!limit){
-            return products;
-        }
-        const productsLimit = products.slice(0, limit);
+        let products = await fs.promises.readFile(this.#path,"utf-8");
+        products = JSON.parse(products);
+        // const {limit} = req.query;
+        // if (!limit){
+        //     return products;
+        // }
+        // const productsLimit = products.slice(0, limit);
     
-        return productsLimit;
+        // return productsLimit;
     }   catch (emptyProductsFile) {
         return [];
     }

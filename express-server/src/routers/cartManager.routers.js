@@ -1,5 +1,5 @@
 import {Router, json} from "express";
-import CartManager from "../app/cartManager";
+import CartManager from "../app/cartManager.js";
 
 let carts = [];
 let products = [

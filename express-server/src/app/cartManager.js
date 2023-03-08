@@ -1,5 +1,7 @@
 import fs from "fs";
-import ProductManager from "./productManager";
+import ProductManager from "./productManager.js";
+
+const productManager = new ProductManager();
 
 export default class CartManager {
     // #nextId = 0;
@@ -106,25 +108,24 @@ export default class CartManager {
     }
 }
 
+// async function main () {
+//     const manager = new cartManager("./Products.json");
 
-async function main () {
-    const manager = new cartManager("./Products.json");
+//     let products = await manager.getProducts();
 
-    let products = await manager.getProducts();
+//     // console.log(products);
 
-    // console.log(products);
+//     // await manager.addProduct("title", "description", 20, "thumbnails", 300, 4000);
 
-    // await manager.addProduct("title", "description", 20, "thumbnails", 300, 4000);
+//     // await manager.getProductById(2);
 
-    // await manager.getProductById(2);
+//     // await manager.updateProduct(1,"title","Mariposa"); //"Joyas", "Oro", 30, "thumbnails", 30, 2000
 
-    // await manager.updateProduct(1,"title","Mariposa"); //"Joyas", "Oro", 30, "thumbnails", 30, 2000
+//     // await manager.deleteProduct(3);
 
-    // await manager.deleteProduct(3);
+//     products = await manager.getProducts();
 
-    products = await manager.getProducts();
+//     console.log(products);
+// }
 
-    console.log(products);
-}
-
-main();
+// main();
