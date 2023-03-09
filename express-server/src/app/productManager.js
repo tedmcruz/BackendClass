@@ -22,17 +22,12 @@ export default class ProductManager {
 
     async getProductById(productId){
         const products = await this.getProducts();
-        // console.log(products)
-        
+       
         let searchedProduct = products.find(p => p.id === productId);
-
-        // let searchedProduct = products.find(p => p.id === JSON.stringify(productId));
 
         if (!searchedProduct) {
             return `Product with Product ID ${productId} doesn't exist.`
         }
-
-        console.log(searchedProduct);
 
         return searchedProduct;
     }
@@ -41,7 +36,6 @@ export default class ProductManager {
         const products = await this.getProducts();
 
         let id = JSON.stringify(products.length +1); // = this.#nextId
-
         let status = true;
 
         const newProduct = {
@@ -57,30 +51,92 @@ export default class ProductManager {
         };
 
         const addedProducts = [...products, newProduct];
-
         await fs.promises.writeFile(this.#path,JSON.stringify(addedProducts));
+        return addedProducts;
     }
     
 
-    async updateProduct(productId,keyToUpdate,dataToUpdate){ //newtitle, newDescription, newPrice, newThumbnails, newCode, newStock
+    async updateProduct(productId, title, description, code, price, stock, category, thumbnails){ //,keyToUpdate,dataToUpdate){ //newtitle, newDescription, newPrice, newThumbnails, newCode, newStock
         const products = await this.getProducts();
-                
-        const updatedProduct = await products.map((p) => 
-            p.id === JSON.stringify(productId) ? {...p, [keyToUpdate]:dataToUpdate } : p
-            );
+        let id = productId;
+        let status = true;
 
-        await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
+        let originalProduct = products.find(p => p.id === productId);
+
+        if(title===undefined||title===null){
+            title = originalProduct.title
+        }
+        if(description===undefined||description===null){
+            description = originalProduct.description
+        }
+        if(code===undefined||code===null){
+            code = originalProduct.code
+        }
+        if(price===undefined||price===null){
+            price = originalProduct.price
+        }
+        if(stock===undefined||stock===null){
+            stock = originalProduct.stock
+        }
+        if(category===undefined||category===null){
+            category = originalProduct.category
+        }
+        if(thumbnails===undefined||thumbnails===null){
+            thumbnails = originalProduct.thumbnails
+        }
+
+        const updatedProduct = {
+            id, 
+            title, 
+            description, 
+            code, 
+            price, 
+            status, 
+            stock, 
+            category, 
+            thumbnails
+        };
+        const updatedProductsById = products.map((p) => 
+        p.id === productId ? updatedProduct : p
+        );
+
+        await fs.promises.writeFile(this.#path,JSON.stringify(updatedProductsById))
+        return updatedProductsById;
     }
 
     async deleteProduct(productId){
-        const products = await this.getProducts();
-        
-                
-        const updatedProduct = await products.map((p) => 
-            p.id === JSON.stringify(productId) ? {...p, ["title"]:"", ["description"]:"",["code"]:"",["price"]:"",["status"]:"",["stock"]:"",["category"]:"",["thumbnails"]:""} : p
-            );
+        try{
+            const products = await this.getProducts();
+            let productById = products.find(p => p.id === productId);
+            let id = productId;
+            let description ="";
+            let price = "";
+            let status = "";
+            let stock ="";
+            let category ="";
+            let thumbnails = "";
+            
+            let title;
+            let code;
+            if(productById.status===""){
+                title = await productById.title;
+                code = await productById.code;
+            }else {
+                title = await `${productById.title} was the title of the product with this ID`;
+                code = await `${productById.code} was the code of the product with this ID`;
+            }
 
-        await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
+            const deletedProduct = {id, title, description, code, price, status, stock, category, thumbnails};
+            
+            const updatedProducts = await products.map((p) => 
+                p.id === productId ? deletedProduct : p
+                );
+
+            await fs.promises.writeFile(this.#path,JSON.stringify(updatedProducts))
+            return updatedProducts;
+        } catch (error){
+            return (`Error deleting product with ID:${productId}, verify that product exists.`)
+        }
     }
 }
 

@@ -28,63 +28,27 @@ productManagerRouter.get("/:pid", async (req,res)=>{
 
 productManagerRouter.post("/",async (req,res) =>{
 
-    id = JSON.parse(id) + 1;
-    id = JSON.stringify(id);
-    let status = true;
     let thumbnails = [];
-
     const {title, description, code, price, stock, category} = req.body;
-
-    const newProduct = {id, title, description, code, price, status, stock, category, thumbnails};
-
-    products = [...products, newProduct];
-
-    res.send(newProduct);
+    const addProduct = await productManager.addProduct(title, description, code, price, stock, category, thumbnails);
+    res.send(addProduct);
 });
 
 productManagerRouter.put("/:pid", async (req,res)=>{
     
     const { pid } = req.params;
-    let id = pid;
-    let status = true;
     let thumbnails = [];
-
     const {title, description, code, price, stock, category} = req.body;
-
-    const updatedProduct = {id, title, description, code, price, status, stock, category, thumbnails};
-
-    const updatedProductsById = products.map((p) => 
-    p.id === pid ? updatedProduct : p
-    );
-
-    products = updatedProductsById;
-    
-    res.send(updatedProductsById);
+    const updateProduct = await productManager.updateProduct(pid, title, description, code, price, stock, category,thumbnails);
+    res.send(updateProduct);
 });
 
 productManagerRouter.delete("/:pid", async (req,res)=>{
     
     const { pid } = req.params;
-    let productById = products.find(p => p.id === pid);
-    let id = pid;
-    let title = `${productById.title} was the title of the product with this ID`;
-    let description ="";
-    let code = `${productById.code} was the code of the product with this ID`;
-    let price = "";
-    let status = "";
-    let stock ="";
-    let category ="";
-    let thumbnails = "";
-
-    const updatedProduct = {id, title, description, code, price, status, stock, category, thumbnails};
-
-    const updatedProductsById = products.map((p) => 
-    p.id === pid ? updatedProduct : p
-    );
-
-    products = updatedProductsById;
-    
-    res.send(updatedProductsById);
+    const deleteProduct = await productManager.deleteProduct(pid);
+    let updatedProducts = deleteProduct;
+    res.send(updatedProducts);
 });
 
 export default productManagerRouter;
