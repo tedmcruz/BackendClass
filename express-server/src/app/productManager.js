@@ -1,5 +1,4 @@
 import fs from "fs";
-import {Router, json} from "express";
 
 export default class ProductManager {
     // #nextId = 0;
@@ -10,6 +9,8 @@ export default class ProductManager {
         this.path = path;
     }
 
+    // Get Products
+
     async getProducts() {
     try {
         let products = await fs.promises.readFile(this.#path,"utf-8");
@@ -19,6 +20,8 @@ export default class ProductManager {
         return [];
     }
     }
+
+    // Get Product by ID
 
     async getProductById(productId){
         const products = await this.getProducts();
@@ -31,6 +34,8 @@ export default class ProductManager {
 
         return searchedProduct;
     }
+
+    // Add Product
 
     async addProduct(title, description, code, price, stock, category, thumbnails){
         const products = await this.getProducts();
@@ -55,6 +60,7 @@ export default class ProductManager {
         return addedProducts;
     }
     
+    // Update/Modify Product
 
     async updateProduct(productId, title, description, code, price, stock, category, thumbnails){ //,keyToUpdate,dataToUpdate){ //newtitle, newDescription, newPrice, newThumbnails, newCode, newStock
         const products = await this.getProducts();
@@ -104,6 +110,8 @@ export default class ProductManager {
         return updatedProductsById;
     }
 
+    // Delete Product detail by leave digital footprint
+
     async deleteProduct(productId){
         try{
             const products = await this.getProducts();
@@ -121,7 +129,7 @@ export default class ProductManager {
             if(productById.status===""){
                 title = await productById.title;
                 code = await productById.code;
-            }else {
+            }else if (productById.status!==""){
                 title = await `${productById.title} was the title of the product with this ID`;
                 code = await `${productById.code} was the code of the product with this ID`;
             }

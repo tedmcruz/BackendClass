@@ -1,18 +1,13 @@
 import {Router, json} from "express";
 import CartManager from "../app/cartManager.js";
 
-let carts = [];
-let products = [
-    {id:"1",title:"Jabon", description:"Jabon liquido para manos",code:"101"},
-    {id:"2",title:"Shampoo", description:"Shampoo liquido para cabeza",code:"202"}
-];
-
-let id = 0;
-
 const cartManagerRouter = Router();
+const cartManager = new CartManager;
 cartManagerRouter.use(json());
 
-cartManagerRouter.get("/",(req,res) =>{
+cartManagerRouter.get("/", async (req,res) =>{
+    await cartManager.getCarts();
+    const carts = await cartManager.getCarts();
     const {limit} = req.query;
     if (!limit){
         return res.send(carts);
@@ -22,14 +17,14 @@ cartManagerRouter.get("/",(req,res) =>{
     res.send(cartsLimit);
 });
 
-cartManagerRouter.get("/:cid", (req,res)=>{
+cartManagerRouter.get("/:cid", async (req,res)=>{
     const { cid } = req.params;
     let cartById = carts.find(c => c.id === cid);
     res.send(cartById);
 });
 
 
-cartManagerRouter.post("/",(req,res) =>{
+cartManagerRouter.post("/", async (req,res) =>{
 
     id = JSON.parse(id) + 1;
     id = JSON.stringify(id);
@@ -41,7 +36,7 @@ cartManagerRouter.post("/",(req,res) =>{
     res.send(newCart);
 });
 
-cartManagerRouter.post("/:cid/product/:pid", (req,res) =>{
+cartManagerRouter.post("/:cid/product/:pid", async (req,res) =>{
 
     const {cid} = req.params;
     let cartId = cid;

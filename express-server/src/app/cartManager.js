@@ -2,13 +2,14 @@ import fs from "fs";
 import ProductManager from "./productManager.js";
 
 const productManager = new ProductManager();
+const products = await productManager.getProducts();
 
 export default class CartManager {
     // #nextId = 0;
-    #path = "../server/Carts.json";
+    #path = "./src/server/Carts.json";
     
     constructor(path){
-        path = this.#path;
+        this.#path = path;
     }
 
     // Create ID for Cart
@@ -40,19 +41,19 @@ export default class CartManager {
     async getCarts() {
     try {
         const carts = await fs.promises.readFile(this.#path,"utf-8");
-
-        return JSON.parse(carts);
+        carts = JSON.parse(carts);
+        return carts;
     }   catch (emptyCartsFile) {
         return [];
     }
     }
 
-    //Get Cart by ID
+    // Get Cart by ID
 
     async getCartById(cartId){
         const carts = await this.getCarts();
 
-        let searchedCart = carts.find(c => c.id === JSON.stringify(cartId));
+        let searchedCart = carts.find(c => c.id === cartId);
 
         if (!searchedCart) {
             throw new Error(`Cart with Cart ID ${cartId} doesn't exist.`)
@@ -107,25 +108,3 @@ export default class CartManager {
         await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
     }
 }
-
-// async function main () {
-//     const manager = new cartManager("./Products.json");
-
-//     let products = await manager.getProducts();
-
-//     // console.log(products);
-
-//     // await manager.addProduct("title", "description", 20, "thumbnails", 300, 4000);
-
-//     // await manager.getProductById(2);
-
-//     // await manager.updateProduct(1,"title","Mariposa"); //"Joyas", "Oro", 30, "thumbnails", 30, 2000
-
-//     // await manager.deleteProduct(3);
-
-//     products = await manager.getProducts();
-
-//     console.log(products);
-// }
-
-// main();
