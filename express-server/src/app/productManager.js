@@ -139,26 +139,3 @@ export default class ProductManager {
         }
     }
 }
-
-
-async function main () {
-    const manager = new ProductManager("./Products.json");
-
-    let products = await manager.getProducts();
-
-    // console.log(products);
-
-    // await manager.addProduct("title", "description", 20, "thumbnails", 300, 4000);
-
-    // await manager.getProductById(2);
-
-    // await manager.updateProduct(1,"title","Mariposa"); //"Joyas", "Oro", 30, "thumbnails", 30, 2000
-
-    // await manager.deleteProduct(3);
-
-    products = await manager.getProducts();
-
-    console.log(products);
-}
-
-// main();
