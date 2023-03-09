@@ -1,3 +1,4 @@
+import { Console } from "console";
 import fs from "fs";
 import ProductManager from "./productManager.js";
 
@@ -9,7 +10,7 @@ export default class CartManager {
     #path = "./src/server/Carts.json";
     
     constructor(path){
-        this.#path = path;
+        this.path = path;
     }
 
     // Create ID for Cart
@@ -17,10 +18,10 @@ export default class CartManager {
     async createId(){
         let carts = await this.getCarts();
         if(!carts || carts === []) {
-            let cartId = 1
+            let cartId = JSON.stringify(1)
             return cartId;
         } else {
-            let cartId = carts.length + 1;
+            let cartId = JSON.stringify(carts.length + 1);
             return cartId;
         }
     } 
@@ -33,8 +34,14 @@ export default class CartManager {
             cartId: await this.createId(),
             products:[]
         }
-        carts = [...carts,newCart];
-        await fs.promises.writeFile(this.#path, JSON.stringify(carts))
+
+        if (carts===[]){
+            carts = [newCart]
+        } else{
+            carts = [...carts,newCart];
+        }
+
+        await fs.promises.writeFile(this.#path,JSON.stringify(carts))
         return carts;
     }
 
@@ -55,7 +62,7 @@ export default class CartManager {
     async getCartById(cartId){
         const carts = await this.getCarts();
 
-        let searchedCart = carts.find(c => c.id === cartId);
+        let searchedCart = carts.find((c) => c.cartId === cartId);
 
         if (!searchedCart) {
             return `Cart with Cart ID ${cartId} doesn't exist.`
@@ -66,49 +73,63 @@ export default class CartManager {
 
     // Add Product to Cart
 
-    async addProductToCart(title, description, code, price, stock, category, thumbnails){
-        const products = await this.getProducts();
+    async addProductToCart(cartId,productId,quantity){
+        
+        const products = await productManager.getProducts();
+        let productById = products.find((p)=> p.id === productId);
 
-        let id = JSON.stringify(products.length +1); // = this.#nextId
+        let carts = await this.getCarts();
+        let cartById = carts.find((c)=> c.cartId === cartId);
 
-        let status = true;
+        let allProductsByCartId = cartById.products;
+        let productByCartId = cartById.products.find(p => p.id === productId);
 
-        const newProduct = {
+        let oldProductQuantityInCart;
+        let newProductQuantityInCart;
+        
+        if(productByCartId===undefined){
+                oldProductQuantityInCart = 0;
+        }else{
+                oldProductQuantityInCart = productByCartId['quantity'];
+        }
+
+        if(productByCartId === []){
+                newProductQuantityInCart = 0;
+        } else if(productByCartId===undefined||productByCartId===[]||productByCartId===null){
+                newProductQuantityInCart = quantity;
+        } else if (oldProductQuantityInCart === undefined){
+                newProductQuantityInCart = quantity;
+        } else {
+                newProductQuantityInCart = oldProductQuantityInCart+quantity;
+        } 
+
+        let id = productId;
+        let code = productById.code;
+        quantity = newProductQuantityInCart;
+        let updatedProduct;
+
+        const productToAdd = {
         id,
-        title,
-        description,
         code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnails
+        quantity
         };
 
-        const addedProducts = [...products, newProduct];
+        if (productByCartId===undefined||productByCartId===[]){
+            let fullProductList = [...allProductsByCartId,productToAdd];
+            updatedProduct = fullProductList;
+        } else {
+            updatedProduct = allProductsByCartId.map((p)=>
+                p.id === productId ? productToAdd : p)
+        }
 
-        await fs.promises.writeFile(this.#path,JSON.stringify(addedProducts));
-    }
-    
+        const newCart = {["cartId"]:cartId,["products"]:updatedProduct};
 
-    async updateProduct(productId,keyToUpdate,dataToUpdate){ //newtitle, newDescription, newPrice, newThumbnails, newCode, newStock
-        const products = await this.getProducts();
-                
-        const updatedProduct = await products.map((p) => 
-            p.id === JSON.stringify(productId) ? {...p, [keyToUpdate]:dataToUpdate } : p
-            );
+        const updatedCart = carts.map((c) => 
+                c.cartId === cartId ? newCart : c
+                );
 
-        await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
-    }
+        await fs.promises.writeFile(this.#path,JSON.stringify(updatedCart));
 
-    async deleteProduct(productId){
-        const products = await this.getProducts();
-        
-                
-        const updatedProduct = await products.map((p) => 
-            p.id === JSON.stringify(productId) ? {...p, ["title"]:"", ["description"]:"",["code"]:"",["price"]:"",["status"]:"",["stock"]:"",["category"]:"",["thumbnails"]:""} : p
-            );
-
-        await fs.promises.writeFile(this.#path,JSON.stringify(updatedProduct))
+        return updatedCart;
     }
 }
