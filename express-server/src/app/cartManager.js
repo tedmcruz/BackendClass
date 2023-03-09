@@ -115,8 +115,9 @@ export default class CartManager {
         };
 
         if (productByCartId===undefined||productByCartId===[]){
-            let fullProductList = [...allProductsByCartId,productToAdd];
-            updatedProduct = fullProductList;
+            // let fullProductList = [...allProductsByCartId,productToAdd];
+            // updatedProduct = fullProductList;
+            updatedProduct = [...allProductsByCartId,productToAdd];
         } else {
             updatedProduct = allProductsByCartId.map((p)=>
                 p.id === productId ? productToAdd : p)

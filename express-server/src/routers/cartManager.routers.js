@@ -33,46 +33,9 @@ cartManagerRouter.post("/", async (req,res) =>{
 cartManagerRouter.post("/:cid/product/:pid", async (req,res) =>{
 
     const {cid} = req.params;
-    // let cartId = cid;
     const {pid} = req.params;
-
-    // let productById = products.find(p => p.id === pid);
-    // let idOfProductToAdd = productById.id;
     const {quantity} = req.body;
-
     const addProductToCart = await cartManager.addProductToCart(cid,pid,quantity);
-
-
-    // let filteredCart = carts.find(c => c.id === cid);
-    // let filteredProducts = filteredCart.products;
-    // let filteredIndividualProduct = filteredProducts.find(p => p.id === pid);
-    
-    // let filteredQuantity;
-
-    // if (!filteredIndividualProduct.productsInCart){
-    //     filteredQuantity=quantity;
-    // } else {
-    //     let filteredObject=filteredIndividualProduct.productsInCart;
-    //     filteredQuantity=filteredObject.quantity+quantity;
-    // }
-
-    // const productsInCart = {["id"]:idOfProductToAdd,["quantity"]:filteredQuantity};
-
-    // let updatedProduct = filteredProducts.map((p) => 
-    //         p.id === pid ? productsInCart : p
-    //         );
-
-    // const newCart = {["id"]:cartId,["products"]:updatedProduct};
-
-    // const newCart = {["id"]:cartId,["products"]:addProductToCart};
-
-    // const updatedCart = carts.map((c) => 
-    //         c.id === cid ? newCart : c
-    //         );
-
-    // carts = updatedCart;
-
-    // res.send(updatedCart);
     res.send(addProductToCart);
 });
 
