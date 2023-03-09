@@ -1,9 +1,6 @@
 import {Router, json} from "express";
 import ProductManager from "../app/productManager.js";
 
-// let products = [];
-let id = 0;
-
 const productManagerRouter = Router();
 const productManager = new ProductManager;
 productManagerRouter.use(json());
@@ -24,7 +21,6 @@ productManagerRouter.get("/:pid", async (req,res)=>{
     const productById = await productManager.getProductById(pid);
     res.send(productById);
 });
-
 
 productManagerRouter.post("/",async (req,res) =>{
 
