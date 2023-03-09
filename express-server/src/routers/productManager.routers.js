@@ -9,14 +9,19 @@ const productManager = new ProductManager;
 productManagerRouter.use(json());
 
 productManagerRouter.get("/", async (req,res) =>{
+    await productManager.getProducts();
     const products = await productManager.getProducts();
-    res.send(products);
-    console.log(products);
+    const {limit} = req.query;
+    if (!limit){
+        return res.send(products);
+    }
+    const productsLimit = products.slice(0, limit);
+    res.send(productsLimit);
 });
 
 productManagerRouter.get("/:pid", async (req,res)=>{
     const { pid } = req.params;
-    let productById = products.find(p => p.id === pid);
+    const productById = await productManager.getProductById(pid);
     res.send(productById);
 });
 

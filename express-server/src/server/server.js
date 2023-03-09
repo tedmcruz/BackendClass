@@ -1,6 +1,6 @@
 import express from "express";
-import productsManagerRouter from "./routers/productManager.routers.js";
-import cartsManagerRouter from "./routers/cartManager.routers.js";
+import productsManagerRouter from "../routers/productManager.routers.js";
+import cartsManagerRouter from "../routers/cartManager.routers.js";
 // import { dirname } from "path";
 
 const app = express();

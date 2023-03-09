@@ -1,8 +1,9 @@
 import fs from "fs";
+import {Router, json} from "express";
 
 export default class ProductManager {
     // #nextId = 0;
-    #path = "../server/Products.json";
+    #path = "./src/server/Products.json";
 
     constructor(path){
         // path = this.#path;
@@ -13,13 +14,7 @@ export default class ProductManager {
     try {
         let products = await fs.promises.readFile(this.#path,"utf-8");
         products = JSON.parse(products);
-        // const {limit} = req.query;
-        // if (!limit){
-        //     return products;
-        // }
-        // const productsLimit = products.slice(0, limit);
-    
-        // return productsLimit;
+        return products;
     }   catch (emptyProductsFile) {
         return [];
     }
@@ -27,14 +22,19 @@ export default class ProductManager {
 
     async getProductById(productId){
         const products = await this.getProducts();
+        // console.log(products)
+        
+        let searchedProduct = products.find(p => p.id === productId);
 
-        let searchedProduct = products.find(p => p.id === JSON.stringify(productId));
+        // let searchedProduct = products.find(p => p.id === JSON.stringify(productId));
 
         if (!searchedProduct) {
-            throw new Error(`Product with Product ID ${productId} doesn't exist.`)
+            return `Product with Product ID ${productId} doesn't exist.`
         }
 
         console.log(searchedProduct);
+
+        return searchedProduct;
     }
 
     async addProduct(title, description, code, price, stock, category, thumbnails){
@@ -105,4 +105,4 @@ async function main () {
     console.log(products);
 }
 
-main();
+// main();
