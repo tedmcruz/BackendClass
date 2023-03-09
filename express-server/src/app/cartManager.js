@@ -15,6 +15,7 @@ export default class CartManager {
     // Create ID for Cart
 
     async createId(){
+        let carts = await this.getCarts();
         if(!carts || carts === []) {
             let cartId = 1
             return cartId;
@@ -34,13 +35,14 @@ export default class CartManager {
         }
         carts = [...carts,newCart];
         await fs.promises.writeFile(this.#path, JSON.stringify(carts))
+        return carts;
     }
 
     // Get Carts
 
     async getCarts() {
     try {
-        const carts = await fs.promises.readFile(this.#path,"utf-8");
+        let carts = await fs.promises.readFile(this.#path,"utf-8");
         carts = JSON.parse(carts);
         return carts;
     }   catch (emptyCartsFile) {
@@ -56,13 +58,15 @@ export default class CartManager {
         let searchedCart = carts.find(c => c.id === cartId);
 
         if (!searchedCart) {
-            throw new Error(`Cart with Cart ID ${cartId} doesn't exist.`)
+            return `Cart with Cart ID ${cartId} doesn't exist.`
         }
 
-        console.log(searchedCart);
+        return searchedCart;
     }
 
-    async addProduct(title, description, code, price, stock, category, thumbnails){
+    // Add Product to Cart
+
+    async addProductToCart(title, description, code, price, stock, category, thumbnails){
         const products = await this.getProducts();
 
         let id = JSON.stringify(products.length +1); // = this.#nextId

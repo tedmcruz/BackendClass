@@ -19,21 +19,20 @@ cartManagerRouter.get("/", async (req,res) =>{
 
 cartManagerRouter.get("/:cid", async (req,res)=>{
     const { cid } = req.params;
-    let cartById = carts.find(c => c.id === cid);
+    let cartById = await cartManager.getCartById(cid);
     res.send(cartById);
 });
 
 
 cartManagerRouter.post("/", async (req,res) =>{
 
-    id = JSON.parse(id) + 1;
-    id = JSON.stringify(id);
+    const createCart = await cartManager.createCart();
 
-    const newCart = {id, products};
+    // const newCart = {id, products};
 
-    carts = [...carts, newCart];
+    // carts = [...carts, newCart];
 
-    res.send(newCart);
+    res.send(createCart);
 });
 
 cartManagerRouter.post("/:cid/product/:pid", async (req,res) =>{
