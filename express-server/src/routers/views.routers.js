@@ -1,14 +1,16 @@
-import express from "express";
+import {Router, json} from "express";
+// import express from "express";
 
-const router = express.Router();
+const viewsRouter = Router();
+// const viewsRouter = express.Router();
 
-router.get("/foods", (req,res) => {
+viewsRouter.get("/foods", (req,res) => {
     const foods = [
         {name: "Apple", price: 15 },
         {name: "Meat", price: 10 },
         {name: "Chicken", price: 25 },
         {name: "Banana", price: 35 },
-        {name: "Lettuce", price: 05 },
+        {name: "Lettuce", price: 5 },
     ];
 
     const user = {
@@ -19,9 +21,10 @@ router.get("/foods", (req,res) => {
 
     res.render("foods",{
         foods,
-        iser,
+        user,
         isAdmin: user.role === "admin",
+        style: "index.css",
     });
 });
 
-export default router;
+export default viewsRouter;
