@@ -1,30 +1,26 @@
 import {Router, json} from "express";
+// import productManagerRouter from "./productManager.routers.js";
+import ProductManager from "../app/productManager.js";
 // import express from "express";
 
-const viewsRouter = Router();
-// const viewsRouter = express.Router();
+const productsViewsRouter = Router();
+const productManager = new ProductManager();
+productsViewsRouter.use(json());
 
-viewsRouter.get("/foods", (req,res) => {
-    const foods = [
-        {name: "Apple", price: 15 },
-        {name: "Meat", price: 10 },
-        {name: "Chicken", price: 25 },
-        {name: "Banana", price: 35 },
-        {name: "Lettuce", price: 5 },
-    ];
+productsViewsRouter.get("/home", async (req,res) =>{
+    const products = await productManager.getProducts();
 
     const user = {
-        firstName: "Pepe",
-        lastName: "Gonzalez",
-        role: "admin",
+        firstName:"Coder",
+        lastName:"House",
+        role:"admin",
     };
-
-    res.render("foods",{
-        foods,
+    res.render("home",{
         user,
+        products,
         isAdmin: user.role === "admin",
         style: "index.css",
     });
 });
 
-export default viewsRouter;
+export default productsViewsRouter;
