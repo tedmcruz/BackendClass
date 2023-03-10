@@ -1,6 +1,7 @@
 import express from "express";
 import productsManagerRouter from "../routers/productManager.routers.js";
 import cartsManagerRouter from "../routers/cartManager.routers.js";
+import viewsRouter from "../routers/views.routers.js";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 
@@ -23,6 +24,8 @@ app.get('/',(req,res)=>{
     }
     res.render('index',testUser)
 })
+
+app.use ("/", viewsRouter);
 
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
