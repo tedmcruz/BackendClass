@@ -3,6 +3,7 @@ import productsManagerRouter from "./routers/productManager.routers.js";
 import cartsManagerRouter from "./routers/cartManager.routers.js";
 import viewsRouter from "./routers/backupviews.routers.js";
 import productsViewsRouter from "./routers/views.routers.js";
+import realTimeProductsViewsRouter from "./routers/realTimeProductViews.routers.js";
 import handlebars from "express-handlebars";
 import {Server} from "socket.io";
 // import {engine} from "express-handlebars";
@@ -36,6 +37,8 @@ app.get('/',(req,res)=>{
 
 app.use ("/", viewsRouter);
 app.use ("/", productsViewsRouter)
+app.use ("/", realTimeProductsViewsRouter)
+
 
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
