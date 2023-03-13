@@ -11,14 +11,15 @@
         <h1>Greetings, {{user.firstName}}!</h1>
         {{#if isAdmin}}
         <ul>
-            {{#each foods}}
-            <li>{{name}}:{{price}}</li>
+            {{#each products}}
+            <li>{{title}} = {{price}} pesos</li>
             {{/each}}
         </ul>
         {{else}}
         <p>Sorry, autorization was denied to view Products.</p>
         {{/if}}
     </div>
+    <script src="../app/productManager.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>
 </body>
