@@ -4,10 +4,17 @@ import cartsManagerRouter from "./routers/cartManager.routers.js";
 import viewsRouter from "./routers/backupviews.routers.js";
 import productsViewsRouter from "./routers/views.routers.js";
 import handlebars from "express-handlebars";
+import {Server} from "socket.io";
 // import {engine} from "express-handlebars";
 import __dirname from "./utils.js";
 
 const app = express();
+const httpServer = app.listen(8080, () => {
+    console.log("Server listening on port 8080");
+});
+
+const socketServer = new Server(httpServer);
+
 app.use(express.json());
 
 
@@ -33,6 +40,9 @@ app.use ("/", productsViewsRouter)
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
 
-app.listen(8080, () => {
-    console.log("Server listening on port 8080");
-});
+socketServer.on("connection",socket =>{
+    console.log("New cliente connected")
+    socket.on("message",data=>{
+        console.log(data);
+    })
+})
