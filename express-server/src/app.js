@@ -15,9 +15,9 @@ app.engine('handlebars',handlebars.engine());
 // app.engine('handlebars',engine());
 
 app.set('view engine','handlebars');
-app.set('views',__dirname+"../views");
+app.set('views',__dirname+"/views");
 
-app.use(express.static(__dirname + "../public"));
+app.use(express.static(__dirname + "/public"));
 
 app.get('/',(req,res)=>{
     let testUser = {
