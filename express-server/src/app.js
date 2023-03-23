@@ -1,13 +1,12 @@
 import express from "express";
 import productsManagerRouter from "./routers/productManager.routers.js";
 import cartsManagerRouter from "./routers/cartManager.routers.js";
-import viewsRouter from "./routers/backupviews.routers.js";
 import productsViewsRouter from "./routers/views.routers.js";
 import realTimeProductsViewsRouter from "./routers/realTimeProductViews.routers.js";
 import handlebars from "express-handlebars";
 import {Server} from "socket.io";
 // import {engine} from "express-handlebars";
-import __dirname from "./utils.js";
+import { __filename , __dirname } from "./utils.js";
 
 const app = express();
 const httpServer = app.listen(8080, () => {
@@ -35,7 +34,6 @@ app.get('/',(req,res)=>{
     res.render('index',testUser)
 })
 
-app.use ("/", viewsRouter);
 app.use ("/", productsViewsRouter)
 app.use ("/", realTimeProductsViewsRouter)
 
@@ -43,9 +41,27 @@ app.use ("/", realTimeProductsViewsRouter)
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
 
-socketServer.on("connection",socket =>{
-    console.log("New cliente connected")
-    socket.on("message",data=>{
+socketServer.on("connection",socket => {
+    console.log("New cliente connected");
+    
+    socket.on("message",data=> {
         console.log(data);
     })
-})
+    
+    // setInterval(() => {
+    //     socket.emit("message", "Updating Data");
+    // }, 1000);
+
+    socket.on("input-changed", (data) => {
+        console.log(data);
+        socketServer.emit("input-changed",data);
+    });
+});
+
+// socketServer.on("addProduct",socket =>{
+//     console.log("A new product was added.")
+//     socket.emit("products",products=>{
+//         console.log(products);
+//     })
+
+// })

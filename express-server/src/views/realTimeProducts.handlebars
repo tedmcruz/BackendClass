@@ -8,6 +8,25 @@
 </head>
 <body>
     <div>
+    {{!-- <form action="" method="post" enctype="multipart/form-data"> --}}
+        <h3>{{user.firstName}} please add the following information for the product you want to add.</h3>
+        <br>
+        <label for="">Title</label>
+        <input type="text" name="productTitle" id="productTitle" placeholder="Product ">
+        <br>
+        <label for="">Description</label>
+        <input type="text" name="productDescription" class="productDescription" placeholder="description ">
+        <br>
+        <label for="">Code</label>
+        <input type="number" name="productCode" class="productCode" placeholder="100">
+        <br>
+        <label for="">Price</label>
+        <input type="number" name="productPrice" class="productPrice" placeholder="100">
+        <br>
+        {{!-- <input type="submit"> --}}
+    {{!-- </form> --}}
+    </div>
+    <div>
         <h1>Greetings, {{user.firstName}}!</h1>
         {{#if isAdmin}}
         <ul>
@@ -19,7 +38,7 @@
         <p>Sorry, autorization was denied to view Products.</p>
         {{/if}}
     </div>
-    <script src="../app/productManager.js"></script>
+    {{!-- <script src="../app/productManager.js"></script> --}}
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>
 </body>

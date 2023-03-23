@@ -23,4 +23,24 @@ realTimeProductsViewsRouter.get("/realTimeProducts", async (req,res) =>{
     });
 });
 
+realTimeProductsViewsRouter.post("/realTimeProducts",async (req,res) =>{
+
+    let thumbnails = [];
+    const {title, description, code, price, stock, category} = req.body;
+    const addProduct = await productManager.addProduct(title, description, code, price, stock, category, thumbnails);
+    const user = {
+        firstName:"Coder",
+        lastName:"House",
+        role:"admin",
+    };
+    res.send(addProduct);
+    const products = await productManager.getProducts();
+    res.render("realTimeProducts",{
+        user,
+        products,
+        isAdmin: user.role === "admin",
+        style: "index.css",
+    });
+});
+
 export default realTimeProductsViewsRouter;
