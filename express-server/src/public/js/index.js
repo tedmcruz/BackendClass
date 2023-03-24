@@ -9,24 +9,24 @@ socket.on("message", (data) => {
 
 // socket.emit("products",products);
 
-const productTitleInput = document.getElementById(productTitle);
+const productTitleInput = document.getElementById("productTitle");
 productTitleInput.addEventListener("input", (ev) => {
     socket.emit("input-changed", ev.target.value)
 });
 
-// const productDescriptionInput = document.getElementsByClassName(productDescription) ;
-// productDescriptionInput.addEventListener("input", (ev) => {
-//     socket.emit("input-changed",ev.target.value)
-// });
+const productDescriptionInput = document.getElementById("productDescription") ;
+productDescriptionInput.addEventListener("input", (ev) => {
+    socket.emit("input-changed",ev.target.value)
+});
 
-// const productCodeInput = document.getElementsByClassName(productCode) ;
-// productCodeInput.addEventListener("input", (ev) => {
-//     socket.emit("input-changed",ev.target.value)
-// });
+const productCodeInput = document.getElementById("productCode") ;
+productCodeInput.addEventListener("input", (ev) => {
+    socket.emit("input-changed",ev.target.value)
+});
 
-// const productPriceInput = document.getElementsByClassName(productPrice) ;
-// productPriceInput.addEventListener("input", (ev) => {
-//     socket.emit("input-changed",ev.target.value)
-// });
+const productPriceInput = document.getElementById("productPrice") ;
+productPriceInput.addEventListener("input", (ev) => {
+    socket.emit("input-changed",ev.target.value)
+});
 
 // export {titleProdcuctInput,descriptionProdcuctInput,codeProdcuctInput,priceProdcuctInput};
