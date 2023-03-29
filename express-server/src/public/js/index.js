@@ -11,22 +11,29 @@ socket.on("message", (data) => {
 
 const productTitleInput = document.getElementById("productTitle");
 productTitleInput.addEventListener("input", (ev) => {
-    socket.emit("input-changed", ev.target.value)
+    socket.emit("input-changed", "Title in progress = " + ev.target.value)
 });
 
 const productDescriptionInput = document.getElementById("productDescription") ;
 productDescriptionInput.addEventListener("input", (ev) => {
-    socket.emit("input-changed",ev.target.value)
+    socket.emit("input-changed", "Description in progress = " + ev.target.value)
 });
 
 const productCodeInput = document.getElementById("productCode") ;
 productCodeInput.addEventListener("input", (ev) => {
-    socket.emit("input-changed",ev.target.value)
+    socket.emit("input-changed", "Code in progress = " + ev.target.value)
 });
 
 const productPriceInput = document.getElementById("productPrice") ;
 productPriceInput.addEventListener("input", (ev) => {
-    socket.emit("input-changed",ev.target.value)
+    socket.emit("input-changed", "Price in progress = " + ev.target.value)
+});
+
+socket.on("input-changed", (data) => {
+    console.log(data);
+    const receivedProductTitleInput = document.getElementById("receivedProductTitle");
+    receivedProductTitleInput.innerHTML = data;
+
 });
 
 // export {titleProdcuctInput,descriptionProdcuctInput,codeProdcuctInput,priceProdcuctInput};

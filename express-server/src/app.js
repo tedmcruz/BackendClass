@@ -3,9 +3,9 @@ import productsManagerRouter from "./routers/productManager.routers.js";
 import cartsManagerRouter from "./routers/cartManager.routers.js";
 import productsViewsRouter from "./routers/views.routers.js";
 import realTimeProductsViewsRouter from "./routers/realTimeProductViews.routers.js";
-import handlebars from "express-handlebars";
+// import handlebars from "express-handlebars";
 import {Server} from "socket.io";
-// import {engine} from "express-handlebars";
+import {engine} from "express-handlebars";
 import { __filename , __dirname } from "./utils.js";
 
 const app = express();
@@ -18,8 +18,8 @@ const socketServer = new Server(httpServer);
 app.use(express.json());
 
 
-app.engine('handlebars',handlebars.engine());
-// app.engine('handlebars',engine());
+// app.engine('handlebars',handlebars.engine());
+app.engine('handlebars',engine());
 
 app.set('view engine','handlebars');
 app.set('views',__dirname+"/views");
@@ -41,6 +41,11 @@ app.use ("/", realTimeProductsViewsRouter)
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
 
+app.use((req, res, next) => {
+    req.socketServer = socketServer;
+    next();
+});
+
 socketServer.on("connection",socket => {
     console.log("New cliente connected");
     
@@ -56,6 +61,7 @@ socketServer.on("connection",socket => {
         console.log(data);
         socketServer.emit("input-changed",data);
     });
+    
 });
 
 // socketServer.on("addProduct",socket =>{
