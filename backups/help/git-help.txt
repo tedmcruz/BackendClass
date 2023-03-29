@@ -18,6 +18,7 @@
     git log branchB..branchA = to show the commits on branchA that are not on branchB
     git push origin [branch] = Transmit local branch commits to the remote repository branch
     q = quit running command
+    git branch -m old-name new-name = to change branch name.
 
 ----------------INTSALL NODE SASS----------------------------------
     Install "node.js version 17.4.0" for easy use.
