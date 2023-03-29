@@ -8,35 +8,36 @@
 </head>
 <body>
     <div>
-    <form action="" method="post" enctype="multipart/form-data">
+    {{!-- <form action="" method="post" enctype="multipart/form-data"> --}}
         <h3>{{user.firstName}} please add the following information for the product you want to add.</h3>
         <div>
         <label>Title</label>
-        <input type="text" name="productTitle" id="productTitle" placeholder="Product ">
-        <div id="receivedProductTitle"></div>
+        <input type="text" name="title" id="productTitle" placeholder="Product ">
         </div>
 
         <div>
         <label for="">Description</label>
-        <input type="text" name="productDescription" id="productDescription" placeholder="description ">
+        <input type="text" name="description" id="productDescription" placeholder="description ">
         </div>
 
         <div>
         <label for="">Code</label>
-        <input type="number" name="productCode" id="productCode" placeholder="100">
+        <input type="number" name="code" id="productCode" placeholder="100">
         </div>
 
         <div>
         <label for="">Price</label>
-        <input type="number" name="productPrice" id="productPrice" placeholder="100">
+        <input type="number" name="price" id="productPrice" placeholder="100">
         </div>
-        <input type="submit">
-    </form>
+        <div id="receivedProductInformation"></div>
+        <button id="buttonEnter">Enter</button>
+        {{!-- <input type="submit" id="createProductSubmitButton"> --}}
+    {{!-- </form> --}}
     </div>
     <div>
         <h1>Greetings, {{user.firstName}}!</h1>
         {{#if isAdmin}}
-        <ul>
+        <ul id="listOfProducts">
             {{#each products}}
             <li>{{title}} = {{price}} pesos</li>
             {{/each}}

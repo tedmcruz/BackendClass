@@ -7,6 +7,7 @@ import realTimeProductsViewsRouter from "./routers/realTimeProductViews.routers.
 import {Server} from "socket.io";
 import {engine} from "express-handlebars";
 import { __filename , __dirname } from "./utils.js";
+import ProductManager from "./app/productManager.js";
 
 const app = express();
 const httpServer = app.listen(8080, () => {
@@ -14,6 +15,8 @@ const httpServer = app.listen(8080, () => {
 });
 
 const socketServer = new Server(httpServer);
+const productManager = new ProductManager();
+const products = [];
 
 app.use(express.json());
 
@@ -41,10 +44,10 @@ app.use ("/", realTimeProductsViewsRouter)
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
 
-app.use((req, res, next) => {
-    req.socketServer = socketServer;
-    next();
-});
+// app.use("/realTimeProducts", (req, res, next) => {
+//     req.socketServer = socketServer;
+//     next();
+// });
 
 socketServer.on("connection",socket => {
     console.log("New cliente connected");
@@ -61,6 +64,31 @@ socketServer.on("connection",socket => {
         console.log(data);
         socketServer.emit("input-changed",data);
     });
+
+    // socket.on("input-title",(data) => {
+    //     console.log(data)
+    //     productManager.addProduct(data);
+
+    // });
+
+    socket.on("input-product",async (title,description,code,price) => {
+        console.log(title,description,code,price)
+        productManager.addProduct(title,description,code,price);
+        let products = await productManager.getProducts();
+        socket.emit("input-product",JSON.stringify(products))
+    });
+
+    // socket.on("input-description",(title,description,code,price) => {
+    //     console.log(title,description,code,price)
+    //     productManager.addProduct(title,description,code,price);
+
+    // });
+
+    // socket.on("submit-new-product", (newProduct) =>{
+    //     console.log(newProduct);
+    // })
+
+
     
 });
 

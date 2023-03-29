@@ -1,5 +1,6 @@
 import {Router, json} from "express";
 // import productManagerRouter from "./productManager.routers.js";
+// import {productTitleInput,productDescriptionInput,productCodeInput,productPriceInput} from "../public/js/index.js"
 import ProductManager from "../app/productManager.js";
 // import express from "express";
 
@@ -27,14 +28,16 @@ realTimeProductsViewsRouter.post("/realTimeProducts",async (req,res) =>{
 
     let thumbnails = [];
     const {title, description, code, price, stock, category} = req.body;
-    const addProduct = await productManager.addProduct(title, description, code, price, stock, category, thumbnails);
+    // const addProduct = await productManager.addProduct(title, description, code, price, stock, category, thumbnails);
+    await productManager.addProduct(title, description, code, price, stock, category, thumbnails);
     const user = {
         firstName:"Coder",
         lastName:"House",
         role:"admin",
     };
-    res.send(addProduct);
-    const products = await productManager.getProducts();
+    // res.send(addProduct);
+    let products = await productManager.getProducts();
+    products = [...products, ]
     res.render("realTimeProducts",{
         user,
         products,
