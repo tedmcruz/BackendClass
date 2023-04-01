@@ -8,11 +8,18 @@ import {Server} from "socket.io";
 import {engine} from "express-handlebars";
 import { __filename , __dirname } from "./utils.js";
 import ProductManager from "./app/productManager.js";
+import mongoose from "mongoose";
 
 const app = express();
 const httpServer = app.listen(8080, () => {
     console.log("Server listening on port 8080");
 });
+
+mongoose
+    .connect("mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/?retryWrites=true&w=majority")
+    .then((conn) => {
+        console.log("Connected to Data Base.")
+    });
 
 const socketServer = new Server(httpServer);
 const productManager = new ProductManager();
