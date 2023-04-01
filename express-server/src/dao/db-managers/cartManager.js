@@ -1,11 +1,11 @@
 import { Console } from "console";
 import fs from "fs";
-import ProductManager from "./productManager.js";
+import DbProductManager from "./productManager.js";
 
-const productManager = new ProductManager();
+const productManager = new DbProductManager();
 const products = await productManager.getProducts();
 
-export default class CartManager {
+export default class DbCartManager {
     // #nextId = 0;
     #path = "./src/server/Carts.json";
     

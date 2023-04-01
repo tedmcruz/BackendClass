@@ -1,16 +1,32 @@
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
-    id: String,
-    title: String,
-    description: String,
+    id: {
+        type: String
+        },
+    title: {
+        type: String,
+        required: true,
+        },
+    description: {
+        type: String,
+        required: true,
+        },
     code: {
         type: String,
         unique: true,
+        required: true,
     },
-    price: Number,
-    status: Boolean,
-    stock: Number,
+    price: {
+        type: Number,
+        required: true,
+        },
+    status: {
+        type: Boolean,
+        },
+    stock: {
+        type: Number,
+        },
     thumbnails: Array
 });
 
