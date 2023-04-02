@@ -16,7 +16,7 @@ const httpServer = app.listen(8080, () => {
 });
 
 mongoose
-    .connect("mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/?retryWrites=true&w=majority")
+    .connect("mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority")
     .then((conn) => {
         console.log("Connected to Data Base.")
     });

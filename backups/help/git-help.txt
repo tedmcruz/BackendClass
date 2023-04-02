@@ -307,3 +307,20 @@
         HEAD branch: master
         Remote branches:
         If you want to use the value in a script, you would use the first command listed in this answer.
+
+-----------------------------------Connect to MongoDB---------------------------------------------------------
+    
+    - Install mongoose to project = npm install mongoose
+    - Code to start = 
+                    mongoose
+                    .connect("mongodb+srv://tedcruz:<password>@coderhousebackend.jz1sdwn.mongodb.net/<name of database>?retryWrites=true&w=majority")
+                    .then((conn) => {
+                        console.log("Connected to Data Base.")
+                    });
+    (
+        Where:
+                the like is taken from the mongoDB atlas webpage.
+                <password> = password to database without "<" or ">"
+                <name of database> = name of databse without "<" or ">"
+                    
+    )
