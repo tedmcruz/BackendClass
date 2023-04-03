@@ -99,7 +99,9 @@ socketServer.on("connection",socket => {
         // console.log(userName,userMessage)
         const addMessage = await messageManager.addMessage(userName,userMessage);
         // console.log(addMessage)
-        const messages = await messageManager.getMessages();
+
+        // const messages = await messageManager.getMessages();
+        
         // console.log(messages.payload)
         // socketServer.emit("input-message",JSON.stringify(messages))
         // socket.emit("create-message",JSON.stringify(messages))

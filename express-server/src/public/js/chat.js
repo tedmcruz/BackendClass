@@ -40,7 +40,7 @@ const listOfMessages = document.getElementById("listOfMessages");
 socket.on("create-message", (data) => {
     console.log("console.log = "+ data.userName);
 
-    // if (messageUserNameInput.value.trim().length > 0 && messageUserMessageInput.value.trim().length > 0){
+    // if (data.userName.trim().length > 0 && data.userName.trim().length > 0){
             // let messages = "";
             const li = document.createElement("li");
             li.innerText = `${data.userName} : ${data.userMessage}`
