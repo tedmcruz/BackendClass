@@ -61,7 +61,6 @@ socket.on("input-product", (data) => {
     }
 });
 
-
 // productTitleInput.addEventListener("keyup", (ev) => {
 //     if(ev.key === "Enter"){        
 //         if (productTitleInput.value.trim().length > 0 && productDescriptionInput.value.trim().length > 0 && productCodeInput.value.trim().length > 0 && productPriceInput.value.trim().length > 0){

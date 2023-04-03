@@ -13,6 +13,7 @@ productManagerRouter.get("/", async (req,res) =>{
     try{
         if (fileConfiguration === "db"){
             const products = await productModel.find();
+            // console.log(products)
             if (!limit){
                 return res.send({result:"success", payload:products});
             }

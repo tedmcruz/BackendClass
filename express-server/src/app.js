@@ -3,11 +3,13 @@ import productsManagerRouter from "./routers/productManager.routers.js";
 import cartsManagerRouter from "./routers/cartManager.routers.js";
 import productsViewsRouter from "./routers/views.routers.js";
 import realTimeProductsViewsRouter from "./routers/realTimeProductViews.routers.js";
+import messageManagerRouter from "./routers/messageManager.routers.js";
 // import handlebars from "express-handlebars";
 import {Server} from "socket.io";
 import {engine} from "express-handlebars";
 import { __filename , __dirname } from "./utils.js";
 import ProductManager from "./app/productManager.js";
+import {MessageManager} from "./dao/index.js";
 import mongoose from "mongoose";
 
 const app = express();
@@ -23,6 +25,7 @@ mongoose
 
 const socketServer = new Server(httpServer);
 const productManager = new ProductManager();
+const messageManager = new MessageManager();
 const products = [];
 
 app.use(express.json());
@@ -46,10 +49,12 @@ app.get('/',(req,res)=>{
 
 app.use ("/", productsViewsRouter)
 app.use ("/", realTimeProductsViewsRouter)
+app.use ("/", messageManagerRouter)
 
 
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
+app.use("/api/chat", messageManagerRouter);
 
 // app.use("/realTimeProducts", (req, res, next) => {
 //     req.socketServer = socketServer;
@@ -64,7 +69,7 @@ socketServer.on("connection",socket => {
     })
     
     // setInterval(() => {
-    //     socket.emit("message", "Updating Data");
+    //     socket.emit("input", "Updating Data");
     // }, 1000);
 
     socket.on("input-changed", (data) => {
@@ -83,6 +88,22 @@ socketServer.on("connection",socket => {
         productManager.addProduct(title,description,code,price);
         let products = await productManager.getProducts();
         socket.emit("input-product",JSON.stringify(products))
+    });
+
+    socket.on("input-message-changed", (data) => {
+        // console.log(data);
+        socket.emit("input-message-changed",data);
+    });
+
+    socket.on("input-message",async (userName,userMessage) => {
+        // console.log(userName,userMessage)
+        const addMessage = await messageManager.addMessage(userName,userMessage);
+        console.log(addMessage)
+        const messages = await messageManager.getMessages();
+        // console.log(messages.payload)
+        // socketServer.emit("input-message",JSON.stringify(messages))
+        // socket.emit("create-message",JSON.stringify(messages))
+        socketServer.emit("create-message",messages.payload)
     });
 
     // socket.on("input-description",(title,description,code,price) => {
