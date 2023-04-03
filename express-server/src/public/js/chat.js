@@ -36,18 +36,21 @@ buttonEnterForMessage.addEventListener("click", () => {
 });
 
 const listOfMessages = document.getElementById("listOfMessages");
+// socket.on("create-message", (data) => {
 socket.on("create-message", (data) => {
-    console.log(data);
-    if (messageUserNameInput.value.trim().length > 0 && messageUserMessageInput.value.trim().length > 0){
+    console.log("console.log = "+ data.userName);
+
+    // if (messageUserNameInput.value.trim().length > 0 && messageUserMessageInput.value.trim().length > 0){
             // let messages = "";
             const li = document.createElement("li");
-            li.innerText = `${messageUserNameInput.value} : ${messageUserMessageInput.value}`
+            li.innerText = `${data.userName} : ${data.userMessage}`
+            // li.innerText = `${messageUserNameInput.value} : ${messageUserMessageInput.value}`
             listOfMessages.appendChild(li);
             // data.forEach((m)=>{
             //     messages += `${m.messageUserNameInput.value} : ${m.messageUserMessageInput.value}`
             // })
             // listOfMessages.innerHTML = messages;
-    }
+    // }
 });
 
 // productTitleInput.addEventListener("keyup", (ev) => {

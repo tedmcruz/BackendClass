@@ -98,12 +98,13 @@ socketServer.on("connection",socket => {
     socket.on("input-message",async (userName,userMessage) => {
         // console.log(userName,userMessage)
         const addMessage = await messageManager.addMessage(userName,userMessage);
-        console.log(addMessage)
+        // console.log(addMessage)
         const messages = await messageManager.getMessages();
         // console.log(messages.payload)
         // socketServer.emit("input-message",JSON.stringify(messages))
         // socket.emit("create-message",JSON.stringify(messages))
-        socketServer.emit("create-message",messages.payload)
+        // socketServer.emit("create-message",messages.payload)
+        socketServer.emit("create-message",{userName,userMessage})
     });
 
     // socket.on("input-description",(title,description,code,price) => {
