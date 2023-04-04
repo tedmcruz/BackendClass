@@ -4,25 +4,23 @@ import cartsManagerRouter from "./routers/cartManager.routers.js";
 import productsViewsRouter from "./routers/views.routers.js";
 import realTimeProductsViewsRouter from "./routers/realTimeProductViews.routers.js";
 import messageManagerRouter from "./routers/messageManager.routers.js";
-// import handlebars from "express-handlebars";
 import {Server} from "socket.io";
 import {engine} from "express-handlebars";
 import { __filename , __dirname } from "./utils.js";
-import ProductManager from "./app/productManager.js";
-import {MessageManager} from "./dao/index.js";
+import {MessageManager, ProductManager,CartManager} from "./dao/index.js";
 import mongoose from "mongoose";
 
 const app = express();
 const httpServer = app.listen(8080, () => {
     console.log("Server listening on port 8080");
 });
-
+console.log("Before Mongoose")
 mongoose
     .connect("mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority")
     .then((conn) => {
         console.log("Connected to Data Base.")
     });
-
+console.log("After Mongoose")
 const socketServer = new Server(httpServer);
 const productManager = new ProductManager();
 const messageManager = new MessageManager();
@@ -101,7 +99,7 @@ socketServer.on("connection",socket => {
         // console.log(addMessage)
 
         // const messages = await messageManager.getMessages();
-        
+
         // console.log(messages.payload)
         // socketServer.emit("input-message",JSON.stringify(messages))
         // socket.emit("create-message",JSON.stringify(messages))

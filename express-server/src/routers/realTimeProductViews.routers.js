@@ -1,7 +1,7 @@
 import {Router, json} from "express";
 // import productManagerRouter from "./productManager.routers.js";
 // import {productTitleInput,productDescriptionInput,productCodeInput,productPriceInput} from "../public/js/index.js"
-import ProductManager from "../app/productManager.js";
+import { ProductManager } from "../dao/index.js";
 // import express from "express";
 
 const realTimeProductsViewsRouter = Router();

@@ -1,4 +1,6 @@
 import fs from "fs";
+// import mongoose from "mongoose";
+import productModel from "../models/productModel.js";
 
 export default class DbProductManager {
     // #nextId = 0;
@@ -11,14 +13,17 @@ export default class DbProductManager {
 
     // Get Products
 
-    async getProducts() {
-    try {
-        let products = await fs.promises.readFile(this.#path,"utf-8");
-        products = JSON.parse(products);
-        return products;
-    }   catch (emptyProductsFile) {
-        return [];
-    }
+    async getProducts(limit) {
+        try{
+        const products = await productModel.find().lean();
+        if (!limit){
+            return {result:"success", payload:products};
+        }
+        const productsLimit = products.slice(0, limit);
+        return {result:"success", payload:productsLimit};
+        }catch (e) {
+            return {result:"error in productManager", payload: e}
+        }
     }
 
     // Get Product by ID
@@ -38,112 +43,49 @@ export default class DbProductManager {
     // Add Product
 
     async addProduct(title, description, code, price, stock, category, thumbnails){
-        const products = await this.getProducts();
-
-        let id = JSON.stringify(products.length +1); // = this.#nextId
-        let status = true;
-
-        const newProduct = {
-        id,
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnails
-        };
-
-        const addedProducts = [...products, newProduct];
-        await fs.promises.writeFile(this.#path,JSON.stringify(addedProducts));
-        return addedProducts;
+        try{
+            const products = await this.getProducts();
+            if(!title || !description || !code || !price){
+                return {result:"error",payload:"Missing fields"}
+            } 
+            const addProduct = await productModel.create({title, description, code, price, stock, category,thumbnails});
+            return {result:"success", payload:addProduct};
+            
+        }catch (e){
+            return{result:"error", payload:e};
+        }
     }
     
     // Update/Modify Product
 
-    async updateProduct(productId, title, description, code, price, stock, category, thumbnails){ //,keyToUpdate,dataToUpdate){ //newtitle, newDescription, newPrice, newThumbnails, newCode, newStock
-        const products = await this.getProducts();
-        let id = productId;
-        let status = true;
-
-        let originalProduct = products.find(p => p.id === productId);
-
-        if(title===undefined||title===null){
-            title = originalProduct.title
+    async updateProduct(pid, title, description, code, price, stock, category,thumbnails){
+        try{
+            if(!title || !description || !code || !price){
+                return ({result:"error",payload:"Missing fields"})
+            } 
+            const updateProduct = await productModel.findOneAndUpdate(
+                {_id: pid},
+                {title, description,code,price},
+                {new: true},
+            )
+            return {result:"success", payload:updateProduct};
+        } catch (e) {
+            return {result:"error",payload:e}
         }
-        if(description===undefined||description===null){
-            description = originalProduct.description
-        }
-        if(code===undefined||code===null){
-            code = originalProduct.code
-        }
-        if(price===undefined||price===null){
-            price = originalProduct.price
-        }
-        if(stock===undefined||stock===null){
-            stock = originalProduct.stock
-        }
-        if(category===undefined||category===null){
-            category = originalProduct.category
-        }
-        if(thumbnails===undefined||thumbnails===null){
-            thumbnails = originalProduct.thumbnails
-        }
-
-        const updatedProduct = {
-            id, 
-            title, 
-            description, 
-            code, 
-            price, 
-            status, 
-            stock, 
-            category, 
-            thumbnails
-        };
-        const updatedProductsById = products.map((p) => 
-        p.id === productId ? updatedProduct : p
-        );
-
-        await fs.promises.writeFile(this.#path,JSON.stringify(updatedProductsById))
-        return updatedProductsById;
     }
 
     // Delete Product detail by leave digital footprint
 
-    async deleteProduct(productId){
+    async deleteProduct(pid){
         try{
-            const products = await this.getProducts();
-            let productById = products.find(p => p.id === productId);
-            let id = productId;
-            let description ="";
-            let price = "";
-            let status = "";
-            let stock ="";
-            let category ="";
-            let thumbnails = "";
-            
-            let title;
-            let code;
-            if(productById.status===""){
-                title = await productById.title;
-                code = await productById.code;
-            }else if (productById.status!==""){
-                title = await `${productById.title} was the title of the product with this ID`;
-                code = await `${productById.code} was the code of the product with this ID`;
-            }
 
-            const deletedProduct = {id, title, description, code, price, status, stock, category, thumbnails};
-            
-            const updatedProducts = await products.map((p) => 
-                p.id === productId ? deletedProduct : p
-                );
+            const deleteProduct = await productModel.deleteOne(
+                { _id: pid}
+            );
 
-            await fs.promises.writeFile(this.#path,JSON.stringify(updatedProducts))
-            return updatedProducts;
-        } catch (error){
-            return (`Error deleting product with ID:${productId}, verify that product exists.`)
+            return ({result:"success", payload:deleteProduct});
+        }catch (e){
+            return ({result:"error", payload:e});
         }
     }
 }
