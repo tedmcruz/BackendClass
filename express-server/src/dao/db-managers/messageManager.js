@@ -1,10 +1,6 @@
-import fs from "fs";
-import { markAsUntransferable } from "worker_threads";
-import { dbFileConfiguration } from "../index.js";
 import messageModel from "../models/messageModel.js";
 
 export default class DbMessageManager {
-    // #path = "./src/server/Messages.json";
 
     constructor(path){
         this.path = path;
