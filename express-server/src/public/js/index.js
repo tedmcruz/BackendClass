@@ -30,7 +30,7 @@ productPriceInput.addEventListener("input", (ev) => {
 });
 
 socket.on("input-changed", (data) => {
-    console.log(data);
+    // console.log(data);
     const receivedProductInformationInput = document.getElementById("receivedProductInformation");
     receivedProductInformationInput.innerHTML = data;
 
@@ -49,7 +49,7 @@ buttonEnter.addEventListener("click", (ev) => {
 
 const listOfProducts = document.getElementById("listOfProducts");
 socket.on("input-product", (data) => {
-    console.log(data);
+    // console.log(data);
     // listOfProducts.innerHTML="";
 
     if (productTitleInput.value.trim().length > 0 && productDescriptionInput.value.trim().length > 0 && productCodeInput.value.trim().length > 0 && productPriceInput.value.trim().length > 0){

@@ -18,7 +18,7 @@ realTimeProductsViewsRouter.get("/realTimeProducts", async (req,res) =>{
     };
     res.render("realTimeProducts",{
         user,
-        products,
+        products: products.payload,
         isAdmin: user.role === "admin",
         style: "index.css",
     });
@@ -37,7 +37,7 @@ realTimeProductsViewsRouter.post("/realTimeProducts",async (req,res) =>{
     };
     // res.send(addProduct);
     let products = await productManager.getProducts();
-    products = [...products, ]
+    // products = [...products, ]
     res.render("realTimeProducts",{
         user,
         products,
