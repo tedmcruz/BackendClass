@@ -19,9 +19,13 @@ productManagerRouter.get("/", async (req,res) =>{
 });
 
 productManagerRouter.get("/:pid", async (req,res)=>{
-    const { pid } = req.params;
-    const productById = await productManager.getProductById(pid);
-    res.send(productById);
+    try{    
+        const { pid } = req.params;
+        const productById = await productManager.getProductById(pid);
+        res.send(productById);
+    } catch (e){
+        res.send({result:"error",payload:e})
+    }
 });
 
 productManagerRouter.post("/",async (req,res) =>{
@@ -30,7 +34,6 @@ productManagerRouter.post("/",async (req,res) =>{
 
     try{
         const addProduct = await productManager.addProduct(title, description, code, price, stock, category,thumbnails);
-        console.log(addProduct)
         res.send(addProduct.payload)
 
     }catch (e){

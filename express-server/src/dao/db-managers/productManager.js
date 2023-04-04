@@ -1,13 +1,8 @@
-import fs from "fs";
-// import mongoose from "mongoose";
 import productModel from "../models/productModel.js";
 
 export default class DbProductManager {
-    // #nextId = 0;
-    #path = "./src/server/Products.json";
 
     constructor(path){
-        // path = this.#path;
         this.path = path;
     }
 
@@ -22,29 +17,28 @@ export default class DbProductManager {
         const productsLimit = products.slice(0, limit);
         return {result:"success", payload:productsLimit};
         }catch (e) {
-            return {result:"error in productManager", payload: e}
+            return {result:"error", payload: e}
         }
     }
 
     // Get Product by ID
 
-    async getProductById(productId){
-        const products = await this.getProducts();
+    async getProductById(pid){
        
-        let searchedProduct = products.find(p => p.id === productId);
-
-        if (!searchedProduct) {
-            return `Product with Product ID ${productId} doesn't exist.`
+        try{
+            const searchedProduct = await productModel.find({_id:pid}).lean();
+            console.log(searchedProduct);
+            return searchedProduct;
+        } catch (e){
+            return {result:"error",payload: e}
         }
-
-        return searchedProduct;
+        
     }
-
+    
     // Add Product
 
     async addProduct(title, description, code, price, stock, category, thumbnails){
         try{
-            const products = await this.getProducts();
             if(!title || !description || !code || !price){
                 return {result:"error",payload:"Missing fields"}
             } 
@@ -74,11 +68,10 @@ export default class DbProductManager {
         }
     }
 
-    // Delete Product detail by leave digital footprint
+    // Delete Product
 
     async deleteProduct(pid){
         try{
-
             const deleteProduct = await productModel.deleteOne(
                 { _id: pid}
             );
