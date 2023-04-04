@@ -14,13 +14,11 @@ const app = express();
 const httpServer = app.listen(8080, () => {
     console.log("Server listening on port 8080");
 });
-console.log("Before Mongoose")
 mongoose
     .connect("mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority")
     .then((conn) => {
         console.log("Connected to Data Base.")
     });
-console.log("After Mongoose")
 const socketServer = new Server(httpServer);
 const productManager = new ProductManager();
 const messageManager = new MessageManager();

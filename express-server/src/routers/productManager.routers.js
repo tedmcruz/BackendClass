@@ -1,7 +1,5 @@
 import {Router, json} from "express";
-// import ProductManager from "../app/productManager.js";
 import {ProductManager} from "../dao/index.js";
-// import productModel from "../dao/models/productModel.js";
 
 const productManagerRouter = Router();
 const productManager = new ProductManager;
@@ -11,7 +9,6 @@ productManagerRouter.get("/", async (req,res) =>{
     const {limit} = req.query;
     try{
     const products = await productManager.getProducts(limit);
-    console.log(products.payload)
     res.send(products.payload);
     } catch (e){
         res.status(500).send({result:"error", payload:e});
