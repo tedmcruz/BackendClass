@@ -5,6 +5,8 @@ const cartManagerRouter = Router();
 const cartManager = new CartManager;
 cartManagerRouter.use(json());
 
+// Get Carts
+
 cartManagerRouter.get("/", async (req,res) =>{
     const {limit} = req.query;
     try{
@@ -14,6 +16,8 @@ cartManagerRouter.get("/", async (req,res) =>{
         res.status(500).send({result:"error", payload:e});
     }
 });
+
+// Get Cart by ID
 
 cartManagerRouter.get("/:cid", async (req,res)=>{
     try{    
@@ -25,6 +29,7 @@ cartManagerRouter.get("/:cid", async (req,res)=>{
     }
 });
 
+// Create Cart
 
 cartManagerRouter.post("/", async (req,res) =>{
     const {cartId,title,products}= req.body;
@@ -37,6 +42,8 @@ cartManagerRouter.post("/", async (req,res) =>{
     }
 });
 
+// Add Product to Cart
+
 cartManagerRouter.post("/:cid/product/:pid", async (req,res) =>{
 
     const {cid, pid} = req.params;
@@ -44,7 +51,68 @@ cartManagerRouter.post("/:cid/product/:pid", async (req,res) =>{
 
     try{
             const addProductToCart = await cartManager.addProductToCart(cid,pid,quantity);
-            res.status(201).send({result:"success", payload:addProductToCart});
+            res.status(201).send(addProductToCart.payload);
+    }catch (e){
+        res.status(500).send({result:"error", payload:e});
+    }
+});
+
+// Delete Product From Cart
+
+cartManagerRouter.delete("/:cid/product/:pid", async (req,res) =>{
+
+    const {cid, pid} = req.params;
+
+    try{
+        const updatedCart = await cartManager.deleteProductFromCart(cid,pid);
+        res.status(201).send(updatedCart.payload);
+    }catch (e){
+        res.status(500).send({result:"error", payload:e});
+    }
+});
+
+// Update Cart with Product in new Format
+
+// cartManagerRouter.put("/:cid", async (req,res)=>{
+    
+//     const { cid } = req.params;
+//     const {title, description, code, price, stock, category} = req.body;
+    
+//     try{
+//         const updateProduct = await productManager.updateProduct(pid, title, description, code, price, stock, category,thumbnails)
+//         res.send(updateProduct.payload);
+        
+//     }catch (e){
+//         res.status(500).send({result:"error", payload:e});
+//     }
+// });
+
+// Update Product Quantity in Cart
+
+cartManagerRouter.put("/:cid/product/:pid", async (req,res)=>{
+    
+    const { cid, pid } = req.params;
+    const {quantity} = req.body;
+    
+    try{
+        const updatedCart = await cartManager.updateProductQuantityInCart(cid, pid, quantity)
+        res.send(updatedCart.payload);
+        
+    }catch (e){
+        res.status(500).send({result:"error", payload:e});
+    }
+});
+
+// Delete All Products in Cart
+
+cartManagerRouter.delete("/:cid", async (req,res)=>{
+    
+    const { cid } = req.params;
+    
+    try{
+        const deletedCart = await cartManager.deleteAllProductsFromCart(cid)
+        res.send(deletedCart.payload);
+        
     }catch (e){
         res.status(500).send({result:"error", payload:e});
     }

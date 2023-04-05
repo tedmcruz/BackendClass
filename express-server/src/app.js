@@ -35,7 +35,7 @@ app.set('views',__dirname+"/views");
 
 app.use(express.static(__dirname + "/public"));
 
-app.get('/',(req,res)=>{
+app.get('/products',(req,res)=>{
     let testUser = {
         name:"Coder",
         last_name:"House"

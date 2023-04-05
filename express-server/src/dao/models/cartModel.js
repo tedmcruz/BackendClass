@@ -15,6 +15,8 @@ const cartSchema = new mongoose.Schema({
     },
 });
 
+// cartSchema.plugin(mongoosePaginate);
+
 const cartModel = mongoose.model("carts", cartSchema);
 
 export default cartModel;
