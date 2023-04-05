@@ -1,18 +1,63 @@
 import {Router, json} from "express";
 import {ProductManager} from "../dao/index.js";
+import productModel from "../dao/models/productModel.js";
 
 const productManagerRouter = Router();
 const productManager = new ProductManager;
 productManagerRouter.use(json());
 
 productManagerRouter.get("/", async (req,res) =>{
-    const {limit} = req.query;
+    const {limit, page, sortByPrice, sortByTitle, title, code, price} = req.query;
+
+    const query = {};
+
     try{
-    const products = await productManager.getProducts(limit);
-    res.send(products.payload);
-    } catch (e){
-        res.status(500).send({result:"error", payload:e});
+
+    if (title) {
+        query.title = { $regex: title, $options: "i" };
     }
+      
+    if (code) {
+        query.code = code;
+    }
+
+    if (price) {
+        query.price = price;
+    }
+
+    const user = {
+        firstName:"Coder",
+        lastName:"House",
+        role:"admin",
+    }
+
+    const products = await productModel.paginate(
+        query,
+        {
+            limit: limit ?? 10,
+            lean: true,
+            page: page ?? 1,
+            sort: sortByPrice === "asc" ? { price: 1} : 
+                    sortByPrice === "desc" ? { price: -1 } : 
+                    sortByTitle === "asc" ? { title: 1} : 
+                    sortByTitle === "desc" ? { title: -1 } : 
+                    {createdAt:0} ,
+        }
+    )
+
+    res.send(products.docs)
+    
+    } catch (e) {
+        res.send({result:"error",payload:e})
+    }
+
+    // const {limit} = req.query;
+    // try{
+    // const products = await productManager.getProducts(limit);
+    // res.send(products.payload);
+    // } catch (e){
+    //     res.status(500).send({result:"error", payload:e});
+    // }
 });
 
 productManagerRouter.get("/:pid", async (req,res)=>{

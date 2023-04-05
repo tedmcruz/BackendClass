@@ -9,6 +9,7 @@ import {engine} from "express-handlebars";
 import { __filename , __dirname } from "./utils.js";
 import {MessageManager, ProductManager,CartManager} from "./dao/index.js";
 import mongoose from "mongoose";
+import productModel from "./dao/models/productModel.js";
 
 const app = express();
 const httpServer = app.listen(8080, () => {
@@ -29,18 +30,64 @@ app.use(express.json());
 
 // app.engine('handlebars',handlebars.engine());
 app.engine('handlebars',engine());
-
 app.set('view engine','handlebars');
 app.set('views',__dirname+"/views");
 
 app.use(express.static(__dirname + "/public"));
 
-app.get('/products',(req,res)=>{
-    let testUser = {
-        name:"Coder",
-        last_name:"House"
+// app.get('/',(req,res)=>{
+//     let testUser = {
+//         name:"Coder",
+//         last_name:"House"
+//     }
+//     res.render('index',testUser)
+// })
+
+app.get('/products', async (req,res)=>{
+
+    const {limit, page, sortByPrice, sortByTitle, title, code, price} = req.query;
+
+    const query = {};
+
+    if (title) {
+        query.title = { $regex: title, $options: "i" };
     }
-    res.render('index',testUser)
+      
+    if (code) {
+        query.code = code;
+    }
+
+    if (price) {
+        query.price = price;
+    }
+
+    const user = {
+        firstName:"Coder",
+        lastName:"House",
+        role:"admin",
+    }
+
+    const products = await productModel.paginate(
+        query,
+        {
+            limit: limit ?? 10,
+            lean: true,
+            page: page ?? 1,
+            sort: sortByPrice === "asc" ? { price: 1} : 
+                    sortByPrice === "desc" ? { price: -1 } : 
+                    sortByTitle === "asc" ? { title: 1} : 
+                    sortByTitle === "desc" ? { title: -1 } : 
+                    {createdAt:0} ,
+        }
+    )
+
+    res.render("products",{
+                        user,
+                        products,
+                        isAdmin: user.role === "admin",
+                        style: "index.css"
+                        }
+    )
 })
 
 app.use ("/", productsViewsRouter)

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const cartSchema = new mongoose.Schema({
     cartId: {
@@ -15,7 +16,7 @@ const cartSchema = new mongoose.Schema({
     },
 });
 
-// cartSchema.plugin(mongoosePaginate);
+cartSchema.plugin(mongoosePaginate);
 
 const cartModel = mongoose.model("carts", cartSchema);
 
