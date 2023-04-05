@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>Greetings, {{user.firstName}}!</h1>
+        {{#if isAdmin}}
+        <h2>PRODUCTS</h2>
+        <ul>
+            {{#each products.docs}}
+            <li>{{this.title}} = {{this.price}} pesos 
+                <br>
+                {{this.description}}
+                <br>
+                The code of this product is {{this.code}}.
+            </li>
+                <br>
+            {{/each}}
+        </ul>
+        <div>
+            {{#if products.hasPrevPage}}
+            <a href="/products?page={{products.prevPage}}">Previous Page</a>
+            {{/if}}
+        </div>
+
+        <span>Page {{products.page}} of {{products.totalPages}}</span>
+
+        <div>
+            {{#if products.hasNextPage}}
+            <a href="/products?page={{products.nextPage}}">Next Page</a>
+            {{/if}}
+        </div>
+
+        {{else}}
+        <p>Sorry, autorization was denied to view Products.</p>
+        {{/if}}
+    </div>
+    {{!-- <script src="../dao/index.js"></script> --}}
+    {{!-- <script src="/socket.io/socket.io.js"></script> --}}
+    {{!-- <script src="/js/index.js"></script> --}}
+</body>
+</html>
