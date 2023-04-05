@@ -10,12 +10,8 @@ cartByIdRouter.get("/carts/:cid", async (req,res)=>{
 
     try{    
         const { cid } = req.params;
-        const cartById = await cartManager.getCartById(cid);
-        
-        const productsJson = cartById[0].products;
-        console.log(productsJson)
-        
-        res.render("cartById",{cartById,productsJson,});
+        const cartById = await cartManager.getCartById(cid);       
+        res.render("cartById",{cartById});
     } catch (e){
         res.send({result:"error",payload:e})
     }

@@ -10,20 +10,18 @@
     <div>
         <h1>Greetings</h1>
         {{#each cartById}}
-            <h3>CartId = {{cartId}}</h3>
-            {{#each productsJson}}    
-                <div>Product title = {{title}}
+            <h3>CartId = {{_id}}</h3>
+            {{#each products}}  
+            {{!-- {{#each cartById}}   --}}
+                <div>Product ID = {{_id}}
                     <br>
-                    Description = {{description}}
+                    Amount in Cart = {{quantity}}
                     <br> 
-                    Price = {{price}} pesos
-                    <br>
-                    Code = {{code}}
-                    <br>
                     {{!-- <a href="">Introducir a carrito</a>
                     <br> --}}
                 </div>
             {{/each}}
+            {{!-- {{/each}} --}}
         {{/each}}
     </div>
 </body>

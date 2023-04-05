@@ -53,6 +53,8 @@ export default class DbCartManager {
 
     async addProductToCart(cartId,productId,quantity){
 
+        // START DIFFERENT FORMULA 1 - USING POPULATE  
+
         // try{
         //     const addProductToCart = await cartModel.findById(cartId).populate('products.product');
         //     const product = await productModel.findById(productId);
@@ -77,7 +79,79 @@ export default class DbCartManager {
         //     return ({result:"error", payload:e}); 
         // }
 
-        try{
+        // END DIFFERENT FORMULA 1 - USING POPULATE
+        
+        // START DIFFERENT FORMULA 2 - USING POPULATE
+
+        // try{
+        //     quantity = JSON.stringify(quantity)
+        //     const addProductToCart = await cartModel.findById(cartId);
+
+        //     // console.log(addProductToCart)
+        //     const existingProduct = addProductToCart.products.some(
+        //         (p)=> p._id == productId
+        //     );
+
+        //     // console.log(addProductToCart.products)
+        //     console.log(existingProduct)
+        //     let updatedProducts;
+        //     if(existingProduct){
+        //         updatedProducts = addProductToCart.products.map((p) => {
+        //             if (p._id == productId){
+        //                 return {
+        //                     ...p,
+        //                     quantity: p.quantity + 1
+        //                 }
+        //             }
+
+        //             return p;
+        //         })
+        //     } else {
+        //         updatedProducts = [...addProductToCart.products, {_id:productId, quantity: 1 }];
+        //     }
+
+        //     console.log(updatedProducts)
+        //     console.log(quantity)
+
+        //     addProductToCart.products = updatedProducts;
+
+        //     await addProductToCart.save();
+
+        // return ({result:"success", payload:addProductToCart});
+
+        // } catch (e){
+        //     return ({result:"error", payload:e}); 
+        // }
+        // END DIFFERENT FORMULA 2 - USING POPULATE - USING POPULATE
+
+        // START DIFFERENT FORMULA 3
+
+            // const addProductToCart = await cartModel.findById(cartId);
+
+            // const product = await productModel.findById(productId);
+            //     if (!product) {
+            //     return { result: "error", payload: "Product not found in database" };
+            //     }
+
+            // const existingProduct = addProductToCart.products.find(product => product._id === productId);
+
+            // if (existingProduct) {
+            //     existingProduct.quantity += quantity;
+            // } else {
+            //     addProductToCart.products.push({_id:productId,quantity});
+            // }
+            
+            // await addProductToCart.save();
+
+            //     return ({result:"success", payload:addProductToCart});
+
+            // } catch (e){
+            //     return ({result:"error", payload:e}); 
+
+        // END DIFFERENT FORMULA 3
+        
+        // START DIFFERENT FORMULA 4 - DOESN'T USE POPULATE
+
             const addProductToCart = await cartModel.findById(cartId);
 
             const product = await productModel.findById(productId);
@@ -87,20 +161,33 @@ export default class DbCartManager {
 
             const existingProduct = addProductToCart.products.find(product => product._id === productId);
 
-            if (existingProduct) {
-                existingProduct.quantity += quantity;
+            let updatedProducts;
+            if(existingProduct){
+                updatedProducts = addProductToCart.products.map((p) => {
+                    if (p._id === productId){
+                        return {
+                            ...p,
+                            quantity: p.quantity + quantity
+                        }
+                    }
+
+                    return p;
+                })
             } else {
-                addProductToCart.products.push({_id:productId,quantity});
+                updatedProducts = [...addProductToCart.products,{_id:productId,quantity:quantity}]
             }
-            
+            addProductToCart.products = updatedProducts;
+
             await addProductToCart.save();
 
-            return ({result:"success", payload:addProductToCart});
-        } catch (e){
-            return ({result:"error", payload:e}); 
-        }
-    }
+                return ({result:"success", payload:addProductToCart});
 
+            } catch (e){
+                return ({result:"error", payload:e}); 
+
+        // END DIFFERENT FORMULA 4 - DOESN'T USE POPULATE
+
+    }
     // Delete Product From Cart
 
     async deleteProductFromCart(cartId,productId){
