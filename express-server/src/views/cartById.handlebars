@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>Greetings</h1>
+        {{#each cartById}}
+            <h3>CartId = {{cartId}}</h3>
+            {{#each productsJson}}    
+                <div>Product title = {{title}}
+                    <br>
+                    Description = {{description}}
+                    <br> 
+                    Price = {{price}} pesos
+                    <br>
+                    Code = {{code}}
+                    <br>
+                    {{!-- <a href="">Introducir a carrito</a>
+                    <br> --}}
+                </div>
+            {{/each}}
+        {{/each}}
+    </div>
+</body>
+</html>

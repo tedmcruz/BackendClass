@@ -11,6 +11,7 @@ import {MessageManager, ProductManager,CartManager} from "./dao/index.js";
 import mongoose from "mongoose";
 import productModel from "./dao/models/productModel.js";
 import productByIdRouter from "./routers/productById.routers.js";
+import cartByIdRouter from "./routers/cartById.routers.js";
 
 const app = express();
 const httpServer = app.listen(8080, () => {
@@ -118,6 +119,7 @@ app.use ("/", productsViewsRouter)
 app.use ("/", realTimeProductsViewsRouter)
 app.use ("/", messageManagerRouter)
 app.use ("/", productByIdRouter)
+app.use ("/", cartByIdRouter)
 
 
 app.use("/api/products", productsManagerRouter);
