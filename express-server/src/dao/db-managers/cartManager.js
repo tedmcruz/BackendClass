@@ -151,6 +151,7 @@ export default class DbCartManager {
         // END DIFFERENT FORMULA 3
         
         // START DIFFERENT FORMULA 4 - DOESN'T USE POPULATE
+        try{
 
             const addProductToCart = await cartModel.findById(cartId);
 
@@ -187,6 +188,7 @@ export default class DbCartManager {
 
         // END DIFFERENT FORMULA 4 - DOESN'T USE POPULATE
 
+        }
     }
     // Delete Product From Cart
 

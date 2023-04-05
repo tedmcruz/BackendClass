@@ -25,6 +25,7 @@ mongoose
 const socketServer = new Server(httpServer);
 const productManager = new ProductManager();
 const messageManager = new MessageManager();
+const cartManager = new CartManager();
 const products = [];
 
 app.use(express.json());
@@ -133,6 +134,11 @@ socketServer.on("connection",socket => {
         console.log(data);
     })
     
+    socket.on("singleProductPage-addProduct", async (cartId,productId,quantity)=>{
+        console.log("Server received product to add to cart")
+        const addedProduct = await cartManager.addProductToCart(cartId,productId,quantity);
+        console.log(addedProduct);
+    })
     // setInterval(() => {
     //     socket.emit("input", "Updating Data");
     // }, 1000);

@@ -9,8 +9,13 @@
 <body>
     <div>
         <h1>Greetings</h1>
+        <h2>Enter Your Cart ID</h2>
+        <input type="text" name="cartId" id="singleProductPageCartId" placeholder="Cart ID">
         {{#each productById}}
-            <div>Title = {{title}}
+            <div>
+                <input type="hidden" id="singleProductPageProductId" value="{{_id}}">
+                <br>
+                Title = {{title}}
                 <br>
                 Description = {{description}}
                 <br> 
@@ -18,11 +23,12 @@
                 <br>
                 Code = {{code}}
                 <br>
-                <a href="">Introducir a carrito</a>
-                <br>
                 <a href="/products">Regresar a Products</a>
+                <button type="" id="singleProductPageAddToCartButton">Add to Cart</button>
             </div>
         {{/each}}
     </div>
+        <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/productToCart.js"></script>
 </body>
 </html>

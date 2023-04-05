@@ -9,12 +9,20 @@
 <body>
     <div>
         <h1>Greetings, {{user.firstName}}!</h1>
+        <h2>Enter Your Cart ID</h2>
+        <input type="text" name="cartId" id="cartId" placeholder="Cart ID">
         {{#if isAdmin}}
         <h2>PRODUCTS</h2>
         <ul>
             {{#each products.docs}}
             <li>{{this.title}} = {{this.price}} pesos.
                 <a href="/products/{{this._id}}" >Ir a Producto</a>
+                <button onclick="addToCart('{{this._id}}')">Add to Cart</button>
+                <form method="POST" action="../api/carts/">
+                <input type="hidden" name="productId" value="{{this._id}}">
+                <input type="number" name="quantity" value="1" min="1" max="10">
+                <button type="submit">Add to Cart</button>
+          </form>
             </li>
             {{/each}}
         </ul>
@@ -38,6 +46,6 @@
     </div>
     {{!-- <script src="../dao/index.js"></script> --}}
     {{!-- <script src="/socket.io/socket.io.js"></script> --}}
-    {{!-- <script src="/js/index.js"></script> --}}
+    <script src="/js/productToCart.js"></script>
 </body>
 </html>
