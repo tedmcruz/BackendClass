@@ -25,12 +25,6 @@ productManagerRouter.get("/", async (req,res) =>{
         query.price = price;
     }
 
-    const user = {
-        firstName:"Coder",
-        lastName:"House",
-        role:"admin",
-    }
-
     const products = await productModel.paginate(
         query,
         {
@@ -45,10 +39,10 @@ productManagerRouter.get("/", async (req,res) =>{
         }
     )
 
-    res.send(products.docs)
+    res.send({status:"success",payload:products})
     
     } catch (e) {
-        res.send({result:"error",payload:e})
+        res.send({status:"error",payload:e})
     }
 
     // const {limit} = req.query;

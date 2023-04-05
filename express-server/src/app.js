@@ -10,6 +10,7 @@ import { __filename , __dirname } from "./utils.js";
 import {MessageManager, ProductManager,CartManager} from "./dao/index.js";
 import mongoose from "mongoose";
 import productModel from "./dao/models/productModel.js";
+import productByIdRouter from "./routers/productById.routers.js";
 
 const app = express();
 const httpServer = app.listen(8080, () => {
@@ -27,8 +28,6 @@ const products = [];
 
 app.use(express.json());
 
-
-// app.engine('handlebars',handlebars.engine());
 app.engine('handlebars',engine());
 app.set('view engine','handlebars');
 app.set('views',__dirname+"/views");
@@ -77,32 +76,53 @@ app.get('/products', async (req,res)=>{
                     sortByPrice === "desc" ? { price: -1 } : 
                     sortByTitle === "asc" ? { title: 1} : 
                     sortByTitle === "desc" ? { title: -1 } : 
-                    {createdAt:0} ,
+                    {createdAt:1} ,
+            skip: limit,
         }
     )
 
     res.render("products",{
                         user,
                         products,
+                        limit, 
+                        sortByPrice, 
+                        sortByTitle, 
+                        title, 
+                        code, 
+                        price,
                         isAdmin: user.role === "admin",
                         style: "index.css"
                         }
     )
 })
 
+// app.get('/products/:pid', async (req,res)=>{
+
+//     const {pid} = req.param;
+
+//     const product = await productModel.paginate(
+//         pid,
+//         {
+//             lean: true,
+//         }
+//     )
+
+//     res.render("products/:pid",{
+//                         product,
+//                         style: "index.css"
+//                         }
+//     )
+// })
+
 app.use ("/", productsViewsRouter)
 app.use ("/", realTimeProductsViewsRouter)
 app.use ("/", messageManagerRouter)
+app.use ("/", productByIdRouter)
 
 
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
 app.use("/api/chat", messageManagerRouter);
-
-// app.use("/realTimeProducts", (req, res, next) => {
-//     req.socketServer = socketServer;
-//     next();
-// });
 
 socketServer.on("connection",socket => {
     console.log("New cliente connected");
@@ -120,12 +140,6 @@ socketServer.on("connection",socket => {
         socketServer.emit("input-changed",data);
     });
 
-    // socket.on("input-title",(data) => {
-    //     console.log(data)
-    //     productManager.addProduct(data);
-
-    // });
-
     socket.on("input-product",async (title,description,code,price) => {
         console.log(title,description,code,price)
         productManager.addProduct(title,description,code,price);
@@ -134,42 +148,11 @@ socketServer.on("connection",socket => {
     });
 
     socket.on("input-message-changed", (data) => {
-        // console.log(data);
         socket.emit("input-message-changed",data);
     });
 
     socket.on("input-message",async (userName,userMessage) => {
-        // console.log(userName,userMessage)
         const addMessage = await messageManager.addMessage(userName,userMessage);
-        // console.log(addMessage)
-
-        // const messages = await messageManager.getMessages();
-
-        // console.log(messages.payload)
-        // socketServer.emit("input-message",JSON.stringify(messages))
-        // socket.emit("create-message",JSON.stringify(messages))
-        // socketServer.emit("create-message",messages.payload)
         socketServer.emit("create-message",{userName,userMessage})
     });
-
-    // socket.on("input-description",(title,description,code,price) => {
-    //     console.log(title,description,code,price)
-    //     productManager.addProduct(title,description,code,price);
-
-    // });
-
-    // socket.on("submit-new-product", (newProduct) =>{
-    //     console.log(newProduct);
-    // })
-
-
-    
 });
-
-// socketServer.on("addProduct",socket =>{
-//     console.log("A new product was added.")
-//     socket.emit("products",products=>{
-//         console.log(products);
-//     })
-
-// })

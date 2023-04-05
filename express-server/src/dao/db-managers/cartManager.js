@@ -53,6 +53,30 @@ export default class DbCartManager {
 
     async addProductToCart(cartId,productId,quantity){
 
+        // try{
+        //     const addProductToCart = await cartModel.findById(cartId).populate('products.product');
+        //     const product = await productModel.findById(productId);
+          
+        //     if (!product) {
+        //         return { result: "error", payload: "Product not found in database" };
+        //     }
+            
+        //     const existingProduct = addProductToCart.products.find(product => product.product._id === productId);
+        //     console.log(existingProduct)
+        //     if (existingProduct) {
+        //         existingProduct.quantity += quantity;
+        //     } else {
+        //         addProductToCart.products.push({product:productId,quantity});
+        //     }
+        //     console.log(addProductToCart)
+            
+        //     await addProductToCart.save();
+            
+        //     return ({result:"success", payload:addProductToCart});
+        // } catch (e){
+        //     return ({result:"error", payload:e}); 
+        // }
+
         try{
             const addProductToCart = await cartModel.findById(cartId);
 
