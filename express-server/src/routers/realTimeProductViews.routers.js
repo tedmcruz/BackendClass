@@ -8,7 +8,7 @@ const realTimeProductsViewsRouter = Router();
 const productManager = new ProductManager();
 realTimeProductsViewsRouter.use(json());
 
-realTimeProductsViewsRouter.get("/realTimeProducts", async (req,res) =>{
+realTimeProductsViewsRouter.get("/real-time-products", async (req,res) =>{
     const products = await productManager.getProducts();
 
     const user = {
@@ -16,7 +16,7 @@ realTimeProductsViewsRouter.get("/realTimeProducts", async (req,res) =>{
         lastName:"House",
         role:"admin",
     };
-    res.render("realTimeProducts",{
+    res.render("real_time_products",{
         user,
         products,
         isAdmin: user.role === "admin",
@@ -24,7 +24,7 @@ realTimeProductsViewsRouter.get("/realTimeProducts", async (req,res) =>{
     });
 });
 
-realTimeProductsViewsRouter.post("/realTimeProducts",async (req,res) =>{
+realTimeProductsViewsRouter.post("/real-time-products",async (req,res) =>{
 
     let thumbnails = [];
     const {title, description, code, price, stock, category} = req.body;
@@ -38,7 +38,7 @@ realTimeProductsViewsRouter.post("/realTimeProducts",async (req,res) =>{
     // res.send(addProduct);
     let products = await productManager.getProducts();
     products = [...products, ]
-    res.render("realTimeProducts",{
+    res.render("real_time_products",{
         user,
         products,
         isAdmin: user.role === "admin",
