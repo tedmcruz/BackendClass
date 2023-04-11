@@ -8,19 +8,19 @@
 </head>
 <body>
     <div>
-        <h1>Greetings, {{user.firstName}}!</h1>
-        {{#if isAdmin}}
+        <h1>Greetings</h1>
+        {{!-- {{#if isAdmin}} --}}
         <ul>
             {{#each products}}
             <li>{{title}} = {{price}} pesos</li>
             {{/each}}
         </ul>
-        {{else}}
+        {{!-- {{else}}
         <p>Sorry, autorization was denied to view Products.</p>
-        {{/if}}
+        {{/if}} --}}
     </div>
     <script src="../app/productManager.js"></script>
-    {{!-- <script src="/socket.io/socket.io.js"></script> --}}
-    {{!-- <script src="/js/index.js"></script> --}}
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 </html>

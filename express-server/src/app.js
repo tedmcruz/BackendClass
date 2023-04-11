@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import productsManagerRouter from "./routers/productManager.routers.js";
 import cartsManagerRouter from "./routers/cartManager.routers.js";
 import productsViewsRouter from "./routers/views.routers.js";
@@ -12,8 +12,16 @@ import mongoose from "mongoose";
 import productModel from "./dao/models/productModel.js";
 import productByIdRouter from "./routers/productById.routers.js";
 import cartByIdRouter from "./routers/cartById.routers.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import { AuthenticationRouter } from "./routers/authentication.routers.js";
+import { WebRouter } from "./routers/web.routers.js";
+import path from "path"; // used to make the slash on the url with the same orientation as the with the same "\" instead of "/" . Use => path.join(__dirname,"/pathName") . To use in app => app.set('viewsName', path.join(__dirname,"/pathName"))
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+
 const httpServer = app.listen(8080, () => {
     console.log("Server listening on port 8080");
 });
@@ -28,11 +36,9 @@ const messageManager = new MessageManager();
 const cartManager = new CartManager();
 const products = [];
 
-app.use(express.json());
-
 app.engine('handlebars',engine());
 app.set('view engine','handlebars');
-app.set('views',__dirname+"/views");
+app.set('views',path.join(__dirname+"/views"));
 
 app.use(express.static(__dirname + "/public"));
 
@@ -43,6 +49,30 @@ app.use(express.static(__dirname + "/public"));
 //     }
 //     res.render('index',testUser)
 // })
+
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl:"mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority",
+        ttl:60,
+    }),
+    secret:"secretPassword",
+    resave: true,
+    saveUninitialized: true,
+}));
+
+// app.get("/login",(req,res)=>{
+//     req.session.user = "testUser";
+//     res.send("Session started");
+// });
+
+app.get("/private",(req,res)=>{
+    if (req.session.user){
+    console.log(req.session);
+    res.send("Private session started");
+} else {
+    res.send("You do not have access")
+}
+});
 
 app.get('/products', async (req,res)=>{
 
@@ -126,6 +156,8 @@ app.use ("/", cartByIdRouter)
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
 app.use("/api/chat", messageManagerRouter);
+app.use("/api/sessions",AuthenticationRouter)
+app.use(WebRouter);
 
 socketServer.on("connection",socket => {
     console.log("New cliente connected");
