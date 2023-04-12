@@ -17,4 +17,69 @@ productsViewsRouter.get("/home", async (req,res) =>{
     }
 });
 
+productsViewsRouter.get('/products', async (req,res)=>{
+
+    const {limit, page, sortByPrice, sortByTitle, title, code, price} = req.query;
+
+    const query = {};
+
+    if (title) {
+        query.title = { $regex: title, $options: "i" };
+    }
+      
+    if (code) {
+        query.code = code;
+    }
+
+    if (price) {
+        query.price = price;
+    }
+
+    const user = req.session.user;
+    const first_name = user[0].first_name;
+    const last_name = user[0].last_name;
+    const age = user[0].age;
+    const email = user[0].email;
+    console.log(first_name)
+
+    // const user = {
+    //     firstName:"Coder",
+    //     lastName:"House",
+    //     role:"admin",
+    // }
+
+    const products = await productModel.paginate(
+        query,
+        {
+            limit: limit ?? 10,
+            lean: true,
+            page: page ?? 1,
+            sort: sortByPrice === "asc" ? { price: 1} : 
+                    sortByPrice === "desc" ? { price: -1 } : 
+                    sortByTitle === "asc" ? { title: 1} : 
+                    sortByTitle === "desc" ? { title: -1 } : 
+                    {createdAt:1} ,
+            skip: limit,
+        }
+    )
+
+    res.render("products",{
+                        user,
+                        products,
+                        first_name,
+                        last_name,
+                        age,
+                        email,
+                        limit, 
+                        sortByPrice, 
+                        sortByTitle, 
+                        title, 
+                        code, 
+                        price,
+                        // isAdmin: user.role === "admin",
+                        style: "index.css"
+                        }
+    )
+})
+
 export default productsViewsRouter;

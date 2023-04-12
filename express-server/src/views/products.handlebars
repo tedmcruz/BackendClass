@@ -8,10 +8,10 @@
 </head>
 <body>
     <div>
-        <h1>Greetings, {{user.firstName}}!</h1>
+        <h1>Greetings, {{firstName}}!</h1>
         <h2>Enter Your Cart ID</h2>
         <input type="text" name="cartId" id="cartId" placeholder="Cart ID">
-        {{#if isAdmin}}
+        {{!-- {{#if isAdmin}} --}}
         <h2>PRODUCTS</h2>
         <ul>
             {{#each products.docs}}
@@ -40,12 +40,12 @@
             {{/if}}
         </div>
 
-        {{else}}
+        {{!-- {{else}}
         <p>Sorry, autorization was denied to view Products.</p>
-        {{/if}}
+        {{/if}} --}}
     </div>
     {{!-- <script src="../dao/index.js"></script> --}}
-    {{!-- <script src="/socket.io/socket.io.js"></script> --}}
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/productToCart.js"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@ import messageManagerRouter from "./routers/messageManager.routers.js";
 import {Server} from "socket.io";
 import {engine} from "express-handlebars";
 import { __filename , __dirname } from "./utils.js";
-import {MessageManager, ProductManager,CartManager} from "./dao/index.js";
+import {MessageManager, ProductManager,CartManager, UserManager} from "./dao/index.js";
 import mongoose from "mongoose";
 import productModel from "./dao/models/productModel.js";
 import productByIdRouter from "./routers/productById.routers.js";
@@ -53,7 +53,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(session({
     store: MongoStore.create({
         mongoUrl:"mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority",
-        ttl:60,
+        //ttl:60,
     }),
     secret:"secretPassword",
     resave: true,
@@ -66,7 +66,7 @@ app.use(session({
 // });
 
 app.get("/private",(req,res)=>{
-    if (req.session.user){
+    if (req.session.email){
     console.log(req.session);
     res.send("Private session started");
 } else {
@@ -74,59 +74,59 @@ app.get("/private",(req,res)=>{
 }
 });
 
-app.get('/products', async (req,res)=>{
+// app.get('/products', async (req,res)=>{
 
-    const {limit, page, sortByPrice, sortByTitle, title, code, price} = req.query;
+//     const {limit, page, sortByPrice, sortByTitle, title, code, price} = req.query;
 
-    const query = {};
+//     const query = {};
 
-    if (title) {
-        query.title = { $regex: title, $options: "i" };
-    }
+//     if (title) {
+//         query.title = { $regex: title, $options: "i" };
+//     }
       
-    if (code) {
-        query.code = code;
-    }
+//     if (code) {
+//         query.code = code;
+//     }
 
-    if (price) {
-        query.price = price;
-    }
+//     if (price) {
+//         query.price = price;
+//     }
 
-    const user = {
-        firstName:"Coder",
-        lastName:"House",
-        role:"admin",
-    }
+//     const user = {
+//         firstName:"Coder",
+//         lastName:"House",
+//         role:"admin",
+//     }
 
-    const products = await productModel.paginate(
-        query,
-        {
-            limit: limit ?? 10,
-            lean: true,
-            page: page ?? 1,
-            sort: sortByPrice === "asc" ? { price: 1} : 
-                    sortByPrice === "desc" ? { price: -1 } : 
-                    sortByTitle === "asc" ? { title: 1} : 
-                    sortByTitle === "desc" ? { title: -1 } : 
-                    {createdAt:1} ,
-            skip: limit,
-        }
-    )
+//     const products = await productModel.paginate(
+//         query,
+//         {
+//             limit: limit ?? 10,
+//             lean: true,
+//             page: page ?? 1,
+//             sort: sortByPrice === "asc" ? { price: 1} : 
+//                     sortByPrice === "desc" ? { price: -1 } : 
+//                     sortByTitle === "asc" ? { title: 1} : 
+//                     sortByTitle === "desc" ? { title: -1 } : 
+//                     {createdAt:1} ,
+//             skip: limit,
+//         }
+//     )
 
-    res.render("products",{
-                        user,
-                        products,
-                        limit, 
-                        sortByPrice, 
-                        sortByTitle, 
-                        title, 
-                        code, 
-                        price,
-                        isAdmin: user.role === "admin",
-                        style: "index.css"
-                        }
-    )
-})
+//     res.render("products",{
+//                         user,
+//                         products,
+//                         limit, 
+//                         sortByPrice, 
+//                         sortByTitle, 
+//                         title, 
+//                         code, 
+//                         price,
+//                         isAdmin: user.role === "admin",
+//                         style: "index.css"
+//                         }
+//     )
+// })
 
 // app.get('/products/:pid', async (req,res)=>{
 
