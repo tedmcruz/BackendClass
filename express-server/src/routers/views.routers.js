@@ -48,7 +48,7 @@ productsViewsRouter.get('/products', async (req,res)=>{
         //     firstName:"Coder",
         //     lastName:"House",
         //     role:"admin",
-        // }
+        // } 
 
         const products = await productModel.paginate(
             query,
@@ -56,11 +56,11 @@ productsViewsRouter.get('/products', async (req,res)=>{
                 limit: limit ?? 10,
                 lean: true,
                 page: page ?? 1,
-                sort: sortByPrice === "asc" ? { price: 1} : 
-                        sortByPrice === "desc" ? { price: -1 } : 
-                        sortByTitle === "asc" ? { title: 1} : 
-                        sortByTitle === "desc" ? { title: -1 } : 
-                        {createdAt:1} ,
+                sort: sortByPrice === "asc" ? { price: 1, _id:-1} : 
+                        sortByPrice === "desc" ? { price: -1 , _id:-1} : 
+                        sortByTitle === "asc" ? { title: 1, _id:-1} : 
+                        sortByTitle === "desc" ? { title: -1 , _id:-1} : 
+                        {createdAt: -1, _id:-1} ,
                 skip: limit,
             }
         )
