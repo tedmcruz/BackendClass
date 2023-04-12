@@ -31,7 +31,16 @@
         </ul>
         <div>
             {{#if products.hasPrevPage}}
+                {{#if isSortByPrice}}
+                <a href="/products?page={{products.prevPage}}&limit={{limit}}&sortByPrice={{sortByPrice}}">Previous Page</a>
+                {{else}} 
+                
+                {{#if isSortByTitle}}
+                <a href="/products?page={{products.prevPage}}&limit={{limit}}&sortByTitle={{sortByTitle}}">Previous Page</a>
+                {{else}}
             <a href="/products?page={{products.prevPage}}&limit={{limit}}">Previous Page</a>
+                {{/if}}
+                {{/if}}
             {{/if}}
         </div>
 
@@ -39,7 +48,16 @@
 
         <div>
             {{#if products.hasNextPage}}
+                {{#if isSortByPrice}}
+                <a href="/products?page={{products.nextPage}}&limit={{limit}}&sortByPrice={{sortByPrice}}">Next Page</a>
+                {{else}}
+                
+                {{#if isSortByTitle}}
+                <a href="/products?page={{products.nextPage}}&limit={{limit}}&sortByTitle={{sortByTitle}}">Next Page</a>
+                {{else}}
             <a href="/products?page={{products.nextPage}}&limit={{limit}}">Next Page</a>
+                {{/if}}
+                {{/if}}
             {{/if}}
         </div>
 

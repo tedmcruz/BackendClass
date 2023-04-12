@@ -22,9 +22,11 @@ productsViewsRouter.get('/products', async (req,res)=>{
 
     if (user){
 
-        const {limit, page, sortByPrice, sortByTitle, title, code, price} = req.query;
+        const {title, code, price} = req.query;
+        let {limit, page, sortByPrice, sortByTitle} = req.query;
 
         const query = {};
+        let sortCriteria, sortPriceOrder, sortTitleOrder;
 
         if (title) {
             query.title = { $regex: title, $options: "i" };
@@ -38,11 +40,24 @@ productsViewsRouter.get('/products', async (req,res)=>{
             query.price = price;
         }
         
+        if (!limit){
+            limit = 10
+        }
+
+        if (!page){
+            page = 1
+        }
+
+        if (sortByPrice==="asc"){sortCriteria = { price: 1, _id:-1}} 
+        else if (sortByPrice==="desc"){sortCriteria = { price: -1, _id:-1}} 
+        else if (sortByTitle==="asc"){sortCriteria = { title: 1, _id:-1}} 
+        else if (sortByTitle==="desc"){sortCriteria = { title: -1, _id:-1}}
+        else {sortCriteria = {createdAt: -1, _id:-1}}
+
         const first_name = user[0].first_name;
         const last_name = user[0].last_name;
         const age = user[0].age;
         const email = user[0].email;
-        console.log(first_name)
 
         // const user = {
         //     firstName:"Coder",
@@ -53,15 +68,16 @@ productsViewsRouter.get('/products', async (req,res)=>{
         const products = await productModel.paginate(
             query,
             {
-                limit: limit ?? 10,
+                limit: limit,
                 lean: true,
-                page: page ?? 1,
-                sort: sortByPrice === "asc" ? { price: 1, _id:-1} : 
-                        sortByPrice === "desc" ? { price: -1 , _id:-1} : 
-                        sortByTitle === "asc" ? { title: 1, _id:-1} : 
-                        sortByTitle === "desc" ? { title: -1 , _id:-1} : 
-                        {createdAt: -1, _id:-1} ,
-                skip: limit,
+                page: page,
+                sort: sortCriteria,
+                // sortByPrice === "asc" ? { price: 1, _id:-1} : 
+                //         sortByPrice === "desc" ? { price: -1 , _id:-1} : 
+                //         sortByTitle === "asc" ? { title: 1, _id:-1} : 
+                //         sortByTitle === "desc" ? { title: -1 , _id:-1} : 
+                //         {createdAt: -1, _id:-1} ,
+                // skip: limit,
             }
         )
 
@@ -73,7 +89,10 @@ productsViewsRouter.get('/products', async (req,res)=>{
                             age,
                             email,
                             limit, 
-                            sortByPrice, 
+                            isSortByPrice:sortCriteria.price>-2,
+                            isSortByTitle:sortCriteria.title>-2, 
+                            sortCriteria,
+                            sortByPrice,
                             sortByTitle, 
                             title, 
                             code, 
