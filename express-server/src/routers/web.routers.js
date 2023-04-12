@@ -41,5 +41,15 @@ router.get("/profile",(req,res)=>{
     }
 })
 
+router.get("/logout",(req,res)=>{
+    req.session.destroy((e) => {
+        if (e) {
+          return console.error('Error destroying session:', e);
+        } else {
+        res.redirect('/login');
+        }
+    });
+});
+
 export {router as WebRouter};
 
