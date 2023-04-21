@@ -17,6 +17,8 @@ import MongoStore from "connect-mongo";
 import { AuthenticationRouter } from "./routers/authentication.routers.js";
 import { WebRouter } from "./routers/web.routers.js";
 import path from "path"; // used to make the slash on the url with the same orientation as the with the same "\" instead of "/" . Use => path.join(__dirname,"/pathName") . To use in app => app.set('viewsName', path.join(__dirname,"/pathName"))
+import passport from "passport";
+import initializePassport from "./config/passport.config.js"
 
 const app = express();
 app.use(express.json());
@@ -42,28 +44,22 @@ app.set('views',path.join(__dirname+"/views"));
 
 app.use(express.static(__dirname + "/public"));
 
-// app.get('/',(req,res)=>{
-//     let testUser = {
-//         name:"Coder",
-//         last_name:"House"
-//     }
-//     res.render('index',testUser)
-// })
 
-app.use(session({
-    store: MongoStore.create({
-        mongoUrl:"mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority",
-        //ttl:60,
-    }),
-    secret:"secretPassword",
-    resave: true,
-    saveUninitialized: true,
-}));
+app.use(
+    session({
+        store: new MongoStore({
+            mongoUrl:"mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority",
+            //ttl:60,
+        }),
+        secret:"secretPassword",
+        resave: true,
+        saveUninitialized: true,
+    })
+);
 
-// app.get("/login",(req,res)=>{
-//     req.session.user = "testUser";
-//     res.send("Session started");
-// });
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/private",(req,res)=>{
     if (req.session.email){
@@ -73,78 +69,6 @@ app.get("/private",(req,res)=>{
     res.send("You do not have access")
 }
 });
-
-// app.get('/products', async (req,res)=>{
-
-//     const {limit, page, sortByPrice, sortByTitle, title, code, price} = req.query;
-
-//     const query = {};
-
-//     if (title) {
-//         query.title = { $regex: title, $options: "i" };
-//     }
-      
-//     if (code) {
-//         query.code = code;
-//     }
-
-//     if (price) {
-//         query.price = price;
-//     }
-
-//     const user = {
-//         firstName:"Coder",
-//         lastName:"House",
-//         role:"admin",
-//     }
-
-//     const products = await productModel.paginate(
-//         query,
-//         {
-//             limit: limit ?? 10,
-//             lean: true,
-//             page: page ?? 1,
-//             sort: sortByPrice === "asc" ? { price: 1} : 
-//                     sortByPrice === "desc" ? { price: -1 } : 
-//                     sortByTitle === "asc" ? { title: 1} : 
-//                     sortByTitle === "desc" ? { title: -1 } : 
-//                     {createdAt:1} ,
-//             skip: limit,
-//         }
-//     )
-
-//     res.render("products",{
-//                         user,
-//                         products,
-//                         limit, 
-//                         sortByPrice, 
-//                         sortByTitle, 
-//                         title, 
-//                         code, 
-//                         price,
-//                         isAdmin: user.role === "admin",
-//                         style: "index.css"
-//                         }
-//     )
-// })
-
-// app.get('/products/:pid', async (req,res)=>{
-
-//     const {pid} = req.param;
-
-//     const product = await productModel.paginate(
-//         pid,
-//         {
-//             lean: true,
-//         }
-//     )
-
-//     res.render("products/:pid",{
-//                         product,
-//                         style: "index.css"
-//                         }
-//     )
-// })
 
 app.use ("/", productsViewsRouter)
 app.use ("/", realTimeProductsViewsRouter)
