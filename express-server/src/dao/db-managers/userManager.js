@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import { createHash } from "../../utils.js";
 
 export default class DbUserManager {
 
@@ -26,7 +27,10 @@ export default class DbUserManager {
     async getUserByEmailAndPassword(email,password){
        
         try{
-            const searchedUser = await userModel.find({email,password}).lean();
+            const searchedUser = await userModel.find({
+                email,
+                password:createHash(password)
+            }).lean();
             // console.log(searchedUser);
             return searchedUser;
         } catch (e){
@@ -51,7 +55,14 @@ export default class DbUserManager {
                     role = "user";
                 }
 
-            const createUser = await userModel.create({email, password,role,first_name, last_name, age});
+            const createUser = await userModel.create({
+                email,
+                password: createHash(password),
+                role,
+                first_name,
+                last_name,
+                age
+            });
 
             return {result:"success", payload:createUser};
             
