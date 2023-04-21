@@ -7,7 +7,7 @@ const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
     passport.use(
-        "register",
+        "signup",
         new LocalStrategy(
             { passReqToCallback: true, usernameField: "email"},
 
@@ -28,6 +28,7 @@ const initializePassport = () => {
                         email,
                         age,
                         password: createHash(password),
+                        role : "user",
                     };
 
                     const createdUser = await userModel.create(newUser);
@@ -67,10 +68,7 @@ const initializePassport = () => {
                         return done(null, false);
                     }
 
-                    if (!isValidPassword(user,password)){
-                        
-                        return done(null, false);
-                    }
+                    if (!isValidPassword(user,password)) return done(null, false);
 
                     return done(null,user);
 
@@ -82,5 +80,5 @@ const initializePassport = () => {
     )
 }
 
-export default initializePassport();
+export default initializePassport;
 

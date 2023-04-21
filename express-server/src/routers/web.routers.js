@@ -19,7 +19,7 @@ router.get("/signup",(req,res)=>{
 
 router.get("/profile", async (req,res)=>{
     const user = await req.session.user;
-    console.log(user)
+    // console.log(user)
 
     if(!user){
 
@@ -31,7 +31,7 @@ router.get("/profile", async (req,res)=>{
         const age = user.age;
         const email = user.email;
 
-        console.log(user)
+        // console.log(user)
         res.render("profile",{
             first_name,
             last_name,

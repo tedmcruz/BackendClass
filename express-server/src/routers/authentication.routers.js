@@ -48,10 +48,13 @@ router.post(
     }),
     
     async (req,res) =>{
-        if (!req, user){
-            return res.status(401).send({error:"Invalid credentials"})
+        if (!req.user){
+            return res.status(401).send({error:"Invalid credentials"});
         }
-        req.session.userId = req.user._id;
+
+        req.session.user = req.user;
+        // req.session.userId = req.user._id;
+        // console.log(req.session.userId)
 
         res.redirect("/profile");
 

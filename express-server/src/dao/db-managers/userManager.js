@@ -42,7 +42,20 @@ export default class DbUserManager {
         } catch (e){
             return {result:"error",payload: e}
         }
-        
+    }
+
+    // Get User by Id
+
+    async getUserById(id){
+       
+        try{
+            const searchedUser = await userModel.findOne({
+                _id:id,
+            }).lean();
+            return searchedUser;
+        } catch (e){
+            return {result:"error",payload: e}
+        }
     }
     
     // Add User
