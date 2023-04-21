@@ -18,7 +18,8 @@ productsViewsRouter.get("/home", async (req,res) =>{
 });
 
 productsViewsRouter.get('/products', async (req,res)=>{
-    const user = req.session.user;
+    const user = await req.session.user;
+    console.log(user)
 
     if (user){
 
@@ -54,10 +55,10 @@ productsViewsRouter.get('/products', async (req,res)=>{
         else if (sortByTitle==="desc"){sortCriteria = { title: -1, _id:-1}}
         else {sortCriteria = {createdAt: -1, _id:-1}}
 
-        const first_name = user[0].first_name;
-        const last_name = user[0].last_name;
-        const age = user[0].age;
-        const email = user[0].email;
+        const first_name = user.first_name;
+        const last_name = user.last_name;
+        const age = user.age;
+        const email = user.email;
 
         // const user = {
         //     firstName:"Coder",

@@ -35,10 +35,12 @@ router.post("/login",async (req,res) =>{
         if(!email||!password){
             res.send("Missing Fields")
         } else {
+
             const loginUser = await usermanager.getUserByEmailAndPassword(email,password);
+            // console.log(loginUser)
             // let printEmail = loginUser[0].email
             // console.log(loginUser[0].email)
-            if(loginUser.length===0){
+            if(loginUser.length===0 || loginUser.result === 'error'){
                 authentication = false;
                 // alert("Combination of user and passwrod error.")
                 res.render("login",{

@@ -17,19 +17,19 @@ router.get("/signup",(req,res)=>{
     })
 })
 
-router.get("/profile",(req,res)=>{
-    const user = req.session.user;
-
+router.get("/profile", async (req,res)=>{
+    const user = await req.session.user;
+    console.log(user)
 
     if(!user){
 
         res.redirect("/login")
         
     } else {
-        const first_name = user[0].first_name;
-        const last_name = user[0].last_name;
-        const age = user[0].age;
-        const email = user[0].email;
+        const first_name = user.first_name;
+        const last_name = user.last_name;
+        const age = user.age;
+        const email = user.email;
 
         console.log(user)
         res.render("profile",{

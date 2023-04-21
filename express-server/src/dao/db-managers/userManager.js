@@ -1,5 +1,5 @@
 import userModel from "../models/userModel.js";
-import { createHash } from "../../utils.js";
+import { createHash, isValidPassword } from "../../utils.js";
 
 export default class DbUserManager {
 
@@ -27,11 +27,17 @@ export default class DbUserManager {
     async getUserByEmailAndPassword(email,password){
        
         try{
-            const searchedUser = await userModel.find({
+            const searchedUser = await userModel.findOne({
                 email,
-                password:createHash(password)
+                // password,
             }).lean();
             // console.log(searchedUser);
+            console.log(password)
+            if(!isValidPassword(searchedUser,password)){
+                // return res.status(401).send("Wrong password")
+                return console.log("Error Validating")
+            }
+            // console.log(searchedUser)
             return searchedUser;
         } catch (e){
             return {result:"error",payload: e}
