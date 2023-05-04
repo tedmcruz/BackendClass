@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
         },
     role:{
         type: String,
+        default:'user',
         required: true,
     },
     first_name: {
@@ -27,6 +28,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         // required: true,
     },
+    cart:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Cart'
+    }
         
 });
 

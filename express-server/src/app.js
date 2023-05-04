@@ -80,7 +80,8 @@ app.use ("/", cartByIdRouter)
 app.use("/api/products", productsManagerRouter);
 app.use("/api/carts", cartsManagerRouter);
 app.use("/api/chat", messageManagerRouter);
-app.use("/api/sessions",AuthenticationRouter)
+app.use("/api/sessions",AuthenticationRouter);
+app.use("/api/sessions",WebRouter);
 app.use(WebRouter);
 
 socketServer.on("connection",socket => {
