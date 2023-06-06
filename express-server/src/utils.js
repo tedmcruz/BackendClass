@@ -49,16 +49,15 @@ const authenticateToken = (req,res,next) => {
 // faker.locale = "en_US";
 
 const generateProduct = () => {
-    console.log("generateProductTest")
     return {
         id: faker.database.mongodbObjectId(),
         title: faker.commerce.productName(), 
         description: faker.commerce.productDescription(), 
-        code: faker.random.numeric(), 
+        code: faker.string.numeric(), 
         price: faker.commerce.price(), 
-        stock:faker.random.numeric(1), 
+        stock:faker.string.numeric(1), 
         category:faker.commerce.department(), 
-        thumbnails: faker.image.image()
+        thumbnails: faker.image.url()
     }
 }
 
