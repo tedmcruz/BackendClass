@@ -14,8 +14,9 @@ import productByIdRouter from "./routers/productById.routers.js";
 import cartByIdRouter from "./routers/cartById.routers.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import { AuthenticationRouter } from "./routers/authentication.routers.js";
+import { AuthenticationRouter, methodOfAuthentication } from "./routers/authentication.routers.js";
 import { WebRouter } from "./routers/web.routers.js";
+import { MockingProductsRouter } from "./routers/mockingProducts.routers.js";
 import path from "path"; // used to make the slash on the url with the same orientation as the with the same "\" instead of "/" . Use => path.join(__dirname,"/pathName") . To use in app => app.set('viewsName', path.join(__dirname,"/pathName"))
 import passport from "passport";
 import initializePassport from "./config/passport.config.js"
@@ -24,8 +25,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
-const httpServer = app.listen(8080, () => {
-    console.log("Server listening on port 8080");
+const PORT = process.env.PORT||8080;
+
+const httpServer = app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
 });
 mongoose
     .connect("mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority")
@@ -44,32 +47,37 @@ app.set('views',path.join(__dirname+"/views"));
 
 app.use(express.static(__dirname + "/public"));
 
+if (methodOfAuthentication==="authPassport"){
+    app.use(
+        session({
+            store: new MongoStore({
+                mongoUrl:"mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority",
+                //ttl:60,
+            }),
+            secret:"secretPassword",
+            resave: true,
+            saveUninitialized: true,
+        })
+    );
 
-app.use(
-    session({
-        store: new MongoStore({
-            mongoUrl:"mongodb+srv://tedcruz:mypassword@coderhousebackend.jz1sdwn.mongodb.net/ecommerce?retryWrites=true&w=majority",
-            //ttl:60,
-        }),
-        secret:"secretPassword",
-        resave: true,
-        saveUninitialized: true,
-    })
-);
+    initializePassport();
+    app.use(passport.initialize());
+    app.use(passport.session());
 
-initializePassport();
-app.use(passport.initialize());
-app.use(passport.session());
 
-app.get("/private",(req,res)=>{
-    if (req.session.email){
-    console.log(req.session);
-    res.send("Private session started");
-} else {
-    res.send("You do not have access")
+    app.get("/private",(req,res)=>{
+        if (req.session.email){
+        console.log(req.session);
+        res.send("Private session started");
+    } else {
+        res.send("You do not have access")
+    }
+    });
 }
-});
 
+if (methodOfAuthentication==="authJWT"){
+    let users=[];
+}
 app.use ("/", productsViewsRouter)
 app.use ("/", realTimeProductsViewsRouter)
 app.use ("/", messageManagerRouter)
@@ -82,7 +90,11 @@ app.use("/api/carts", cartsManagerRouter);
 app.use("/api/chat", messageManagerRouter);
 app.use("/api/sessions",AuthenticationRouter);
 app.use("/api/sessions",WebRouter);
+app.use("/mockingProducts",MockingProductsRouter);
 app.use(WebRouter);
+app.use(AuthenticationRouter);
+
+// app.listen(PORT,()=>console.log(`Server listening on port ${PORT}`))
 
 socketServer.on("connection",socket => {
     console.log("New cliente connected");

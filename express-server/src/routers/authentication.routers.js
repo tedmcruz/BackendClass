@@ -4,12 +4,14 @@ import { UserManager } from "../dao/index.js";
 import passport from "passport";
 import { generateToken, authenticateToken} from "../utils.js";
 
-const methodOfAuthentication = "authJWT"; // use "authJWT" for jwt and "authPassport" for passport
+const methodOfAuthentication = "authPassport"; // use "authJWT" for jwt and "authPassport" for passport
 const router = Router();
-const usermanager = new UserManager();
 
 
-if (methodOfAuthentication = "authPassport"){
+if (methodOfAuthentication === "authPassport"){
+    
+    const usermanager = new UserManager();
+
     router.post(
         "/signup", 
         passport.authenticate("signup",{
@@ -117,21 +119,25 @@ if (methodOfAuthentication = "authPassport"){
     })
 }
 
-if (methodOfAuthentication = "authJWT"){
-    let users=[];
+if (methodOfAuthentication === "authJWT"){
+
     router.post("/signup", (req,res)=>{
-        const {name, email, password} = req.body;
+        const {email, password, first_name, last_name, age} = req.body;
         
-        const userExists = users.some((user) => user.email === email);
+        // const userExists = users.some((user) => user.email === email);
+        const userExists = users.find((user) => user.email === email);
         if (userExists) return res.status(409).send("user already exists");
 
-        const newUser = {name,email,password};
+        // const newUser = {email, password, first_name, last_name, age};
 
-        users = [...users, newUser];
+        // users = [...users, newUser];
+        users.push=(req.body);
 
-        const accessToken = generateToken({...newUser, password:undefined});
+        // const accessToken = generateToken({...newUser, password:undefined});
+        const accessToken = generateToken({email, password, first_name, last_name, age});
 
-        res.send({satus:"ok", accessToken})
+        // res.send({satus:"ok", accessToken})
+        res.redirect("/profile")
     });
 
     router.post("/login", (req,res)=>{
@@ -145,7 +151,8 @@ if (methodOfAuthentication = "authJWT"){
 
         const accessToken = generateToken(user);
 
-        res.send({status:"ok", accessToken});
+        // res.send({status:"ok", accessToken});
+        res.redirect("/profile")
     })
 }
 

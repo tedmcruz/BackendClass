@@ -1,6 +1,6 @@
 import {Router} from "express";
-import { methodOfAuthentication } from "./authentication.routers";
-import { authenticateToken } from "../utils";
+import { methodOfAuthentication } from "./authentication.routers.js";
+import { authenticateToken } from "../utils.js";
 
 const router = Router();
 
@@ -19,31 +19,33 @@ router.get("/signup",(req,res)=>{
     })
 })
 
-router.get("/profile", async (req,res)=>{
-    const user = await req.session.user;
-    // console.log(user)
-
-    if(!user){
-
-        res.redirect("/login")
-        
-    } else {
-        const first_name = user.first_name;
-        const last_name = user.last_name;
-        const age = user.age;
-        const email = user.email;
-
-        // console.log(user)
-        res.render("profile",{
-            first_name,
-            last_name,
-            age,
-            email,
-        })
-    }
-})
-
 if (methodOfAuthentication == "authPassport"){
+
+    router.get("/profile", async (req,res)=>{
+        const user = await req.session.user;
+        // console.log(user)
+
+        if(!user){
+
+            res.redirect("/login")
+            
+        } else {
+            const first_name = user.first_name;
+            const last_name = user.last_name;
+            const age = user.age;
+            const email = user.email;
+
+            // console.log(user)
+            res.render("profile",{
+                first_name,
+                last_name,
+                age,
+                email,
+            })
+        }
+    })
+
+
     router.get("/current", async (req,res)=>{
         const user = await req.session.user;
         // console.log(user)
@@ -67,11 +69,20 @@ if (methodOfAuthentication == "authPassport"){
             })
         }
     })
+
+    router.get("/logout",(req,res)=>{
+        req.session.destroy((e) => {
+            if (e) {
+              return console.error('Error destroying session:', e);
+            } else {
+            res.redirect('/login');
+            }
+        });
+    });
 }
 
 if (methodOfAuthentication == "authJWT"){
     router.get("/current", authenticateToken, async (req,res)=>{
-        const user = await req.session.user;
         // console.log(user)
 
         if(!user){
@@ -93,17 +104,13 @@ if (methodOfAuthentication == "authJWT"){
             })
         }
     })
-}
 
-router.get("/logout",(req,res)=>{
-    req.session.destroy((e) => {
-        if (e) {
-          return console.error('Error destroying session:', e);
-        } else {
-        res.redirect('/login');
-        }
-    });
-});
+    router.get("/profile", (req,res)=>{
+        // res.json({message:"Profile Data"})
+        // res.json({message:req.user})
+        res.json({message:accessToken})
+    })
+}
 
 export {router as WebRouter};
 
