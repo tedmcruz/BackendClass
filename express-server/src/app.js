@@ -92,7 +92,7 @@ app.use("/api/chat", messageManagerRouter);
 app.use("/api/sessions",AuthenticationRouter);
 app.use("/api/sessions",WebRouter);
 app.use("/mockingProducts",MockingProductsRouter);
-// app.use(WebRouter);
+app.use(WebRouter);
 // app.use(AuthenticationRouter);
 app.use(errorHandler);
 
