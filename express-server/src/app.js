@@ -20,6 +20,7 @@ import { MockingProductsRouter } from "./routers/mockingProducts.routers.js";
 import path from "path"; // used to make the slash on the url with the same orientation as the with the same "\" instead of "/" . Use => path.join(__dirname,"/pathName") . To use in app => app.set('viewsName', path.join(__dirname,"/pathName"))
 import passport from "passport";
 import initializePassport from "./config/passport.config.js"
+import errorHandler from "./middlewares/errors/index.js"
 
 const app = express();
 app.use(express.json());
@@ -91,8 +92,9 @@ app.use("/api/chat", messageManagerRouter);
 app.use("/api/sessions",AuthenticationRouter);
 app.use("/api/sessions",WebRouter);
 app.use("/mockingProducts",MockingProductsRouter);
-app.use(WebRouter);
-app.use(AuthenticationRouter);
+// app.use(WebRouter);
+// app.use(AuthenticationRouter);
+app.use(errorHandler);
 
 // app.listen(PORT,()=>console.log(`Server listening on port ${PORT}`))
 

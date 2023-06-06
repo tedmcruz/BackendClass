@@ -1,6 +1,9 @@
 import {Router, json} from "express";
 import {ProductManager} from "../dao/index.js";
 import productModel from "../dao/models/productModel.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
+import { generateUserErrorInfo } from "../services/errors/info.js";
 
 const productManagerRouter = Router();
 const productManager = new ProductManager;
@@ -67,6 +70,14 @@ productManagerRouter.get("/:pid", async (req,res)=>{
 productManagerRouter.post("/",async (req,res) =>{
     let thumbnails = [];
     const {title, description, code, price, stock, category} = req.body;
+    if(!title|| !description|| !code|| !price|| !stock|| !category){
+        CustomError.createError({
+            name:"Product creation error",
+            cause:generateUserErrorInfo({title, description, code, price, stock, category,thumbnails}),
+            message:"Error Trying to create Product",
+            code:EErrors.INVALID_TYPES_ERROR
+        })
+    }
 
     try{
         const addProduct = await productManager.addProduct(title, description, code, price, stock, category,thumbnails);
