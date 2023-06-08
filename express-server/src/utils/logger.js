@@ -1,7 +1,7 @@
 // import winston, { format } from "winston";
 import winston from "winston";
 
-const codingEnvironment = "desarrollo" // Use "desarrollo" for a development environment and "produccion" for a production environment.
+const codingEnvironment = "produccion" // Use "desarrollo" for a development environment and "produccion" for a production environment.
 
 const customLevelsOptions ={
     levels : {
@@ -12,9 +12,9 @@ const customLevelsOptions ={
         http:4,
         debug:5,
     },
-    colors:{
+    colors : {
         fatal:"red",
-        error:"orange",
+        error:"magenta",
         warning:"yellow",
         info:"blue",
         http:"green",
@@ -22,13 +22,11 @@ const customLevelsOptions ={
     }
 }
 
-const logger = () =>{
+const loggerEnvironment = () =>{
 
-    console.log("testing logger")
     if (codingEnvironment==="desarrollo"){
-
         return winston.createLogger({
-
+            levels:customLevelsOptions.levels,
             transports: [
                 new winston.transports.Console({
                     level:"debug",
@@ -36,15 +34,14 @@ const logger = () =>{
                         winston.format.colorize({colors:customLevelsOptions.colors}),
                         winston.format.simple(),
                     )
-                })
+                }),
             ]
         })
     }
 
     if (codingEnvironment==="produccion"){
-
         return winston.createLogger({
-
+            levels:customLevelsOptions.levels,
             transports: [
                 new winston.transports.File({
                     filename:"./errors.log",
@@ -57,8 +54,10 @@ const logger = () =>{
 
 }
 
+const logger = loggerEnvironment();
+
 export const addLogger = (req,res,next) => {
     req.logger = logger;
-    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString}`);
+    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`);
     next();
 }

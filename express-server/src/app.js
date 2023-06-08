@@ -98,6 +98,16 @@ app.use(WebRouter);
 app.use(errorHandler);
 app.use(addLogger);
 
+app.get("/loggerTester", (req,res) => {
+    req.logger.fatal("Fatal")
+    req.logger.error("Error")
+    req.logger.warning("Warning")
+    req.logger.info("Info")
+    req.logger.http("Http")
+    req.logger.debug("Debug")
+    res.send({message:"Testing logger"})
+})
+
 // app.listen(PORT,()=>console.log(`Server listening on port ${PORT}`))
 
 socketServer.on("connection",socket => {
