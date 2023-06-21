@@ -22,6 +22,8 @@ import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import errorHandler from "./middlewares/errors/index.js";
 import { addLogger } from "./utils/logger.js";
+import cluster from "cluster";
+import { cpus } from "os";
 
 const app = express();
 app.use(express.json());
@@ -147,3 +149,13 @@ socketServer.on("connection",socket => {
         socketServer.emit("create-message",{userName,userMessage})
     });
 });
+
+if(cluster.isPrimary){
+    console.log("I am a primary process");
+    for (let i=0;i<numberOfProcessors;i++){
+        cluster.fork()
+    }
+}
+else{
+    console.log(`I am a worker processor with id = ${process.pid}`)
+}
