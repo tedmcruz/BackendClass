@@ -152,12 +152,12 @@ socketServer.on("connection",socket => {
     });
 });
 
-if(cluster.isPrimary){
-    console.log("I am a primary process");
-    for (let i=0;i<numberOfProcessors;i++){
-        cluster.fork()
-    }
-}
-else{
-    console.log(`I am a worker processor with id = ${process.pid}`)
-}
+// if(cluster.isPrimary){
+//     console.log("I am a primary process");
+//     for (let i=0;i<numberOfProcessors;i++){
+//         cluster.fork()
+//     }
+// }
+// else{
+//     console.log(`I am a worker processor with id = ${process.pid}`)
+// }
