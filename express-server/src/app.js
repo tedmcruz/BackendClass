@@ -24,6 +24,7 @@ import errorHandler from "./middlewares/errors/index.js";
 import { addLogger } from "./utils/logger.js";
 import cluster from "cluster";
 import { cpus } from "os";
+import { MailRouter } from "./routers/mail.routers.js";
 
 const app = express();
 app.use(express.json());
@@ -96,6 +97,7 @@ app.use("/api/sessions",AuthenticationRouter);
 app.use("/api/sessions",WebRouter);
 app.use("/mockingProducts",MockingProductsRouter);
 app.use(WebRouter);
+app.use(MailRouter);
 // app.use(AuthenticationRouter);
 app.use(errorHandler);
 app.use(addLogger);

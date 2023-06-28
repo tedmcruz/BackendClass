@@ -108,7 +108,7 @@ if (methodOfAuthentication == "authJWT"){
     router.get("/profile", (req,res)=>{
         // res.json({message:"Profile Data"})
         // res.json({message:req.user})
-        res.json({message:accessToken})
+        res.json({message:req.user})
     })
 }
 
