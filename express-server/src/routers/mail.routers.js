@@ -5,19 +5,19 @@ import nodemailer from "nodemailer";
 
 const router = Router();
 const transport = nodemailer.createTransport({
-    service:"gamil",
+    service:'gmail',
     port:587,
     auth:{
-        user:"do.not.reply.passcode.reset@gmail.com",
-        pass:"zqozmihizevlyiml"
+        user:'do.not.reply.passcode.reset@gmail.com',
+        pass:'zqozmihizevlyiml'
     }
 })
 
 router.get("/testEmail",async(req,res)=>{
     let result = await transport.sendMail({
-        from:"Coder Tests <do.not.reply.passcode.reset@gmail.com>",
-        to:"tedcruz@live.com",
-        subject:"Test Email",
+        from:'Coder Tests <do.not.reply.passcode.reset@gmail.com>',
+        to:'tedcruz@live.com',
+        subject:'Test Email',
         html:`
         <div>
             <h1> This is a Test! </h1>
