@@ -1,0 +1,13 @@
+paths:
+  /api/products/:
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Products obtained correctly
+        "401":
+          description: Missing permissions to get products
+        "500":
+          description: Server Error.

@@ -1,0 +1,13 @@
+paths:
+  /api/carts/:
+    get:
+      summary: Get all carts
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carts obtained correctly
+        "401":
+          description: Missing permissions to get carts
+        "500":
+          description: Server Error.
