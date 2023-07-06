@@ -17,6 +17,31 @@ paths:
           description: Missing permissions to get products
         "500":
           description: Server Error.
+  /api/products/{pid}:
+    get:
+      summary: Get product by ID.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid is the ID of the product wanted.
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Product obtained correctly
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#components/schemas/Product'
+        "401":
+          description: Missing permissions to get products
+        "500":
+          description: Server Error.
 
 components:
   schemas:
