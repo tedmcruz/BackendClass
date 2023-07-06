@@ -17,7 +17,7 @@ export default class DbProductManager {
         const productsLimit = products.slice(0, limit);
         return {result:"success", payload:productsLimit};
         }catch (e) {
-            return {result:"error", payload: e}
+            return {result:"error", error: "Products ", payload: e}
         }
     }
 
