@@ -25,6 +25,8 @@ import { addLogger } from "./utils/logger.js";
 import cluster from "cluster";
 import { cpus } from "os";
 import { MailRouter } from "./routers/mail.routers.js";
+import { swaggerSpecs } from "./config/docConfig.js";
+import swaggerUI from "swagger-ui-express";
 
 const app = express();
 app.use(express.json());
@@ -83,6 +85,11 @@ if (methodOfAuthentication==="authPassport"){
 if (methodOfAuthentication==="authJWT"){
     let users=[];
 }
+
+// Documentation
+
+app.use("/api/docs",swaggerUI.serve, swaggerUI.setup(swaggerSpecs)); //endpoint where to look at documentation
+
 app.use ("/", productsViewsRouter)
 app.use ("/", realTimeProductsViewsRouter)
 app.use ("/", messageManagerRouter)
